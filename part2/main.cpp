@@ -61,7 +61,7 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
   glDisable(GL_TEXTURE_2D);
 
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
+  glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("brick.jpg")->getTexture());
 
   glBlendFunc(GL_DST_COLOR,GL_ZERO);
 
@@ -106,18 +106,19 @@ int					main()
 
   light1.radius = 100;
   light1.color = glm::vec3(0.7, 0.5, 0);
-  light1.position = glm::vec3(5, 5, 0);
+  light1.position = glm::vec3(5, 5, -5);
   light2.radius = 100;
   light2.color = glm::vec3(0.1, 0.3, 0.8);
-  light2.position = glm::vec3(-5, -5, 0);
+  light2.position = glm::vec3(-5, 5, 5);
   light3.radius = 50;
   light3.color = glm::vec3(1, 1, 1);
-  light3.position = glm::vec3(0, -10, 2);
+  light3.position = glm::vec3(0, 10, 0);
+
 
   try
     {
       model = ResourceManager::getInstance().get<ObjModelMedia>("goose.obj");
-      cat = ResourceManager::getInstance().get<ObjModelMedia>("cat.obj");
+      cat = ResourceManager::getInstance().get<ObjModelMedia>("brick.obj");
       EventManager::getInstance().play();
     }
   catch (const std::exception &e)
