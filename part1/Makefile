@@ -10,20 +10,20 @@ LDFLAGS		=	-L/usr/lib -lallegro -lallegro_dialog -lallegro_primitives -lallegro_
 
 CPPFLAGS	+=	-I. -I/usr/include/allegro5 \
 			-I../vendors \
-			-I../src/debug \
-			-I../src/manager \
-			-I../src/utilities \
-			-I../src/component \
-			-I../src/loader \
-			-I../src/system \
-			-I../src/generator \
-			-I../src/media \
-			-I../src
+			-I./src/debug \
+			-I./src/manager \
+			-I./src/utilities \
+			-I./src/component \
+			-I./src/loader \
+			-I./src/system \
+			-I./src/generator \
+			-I./src/media \
+			-I./src
 
-SRCS		=	../src/debug/ILogger.cpp \
-			../src/debug/Exception.cpp \
-			../src/manager/Resource.cpp \
-			../src/utilities/Vector3d.cpp \
+SRCS		=	src/debug/ILogger.cpp \
+			src/debug/Exception.cpp \
+			src/manager/Resource.cpp \
+			src/utilities/Vector3d.cpp \
 			../vendors/tiny_obj_loader.cpp \
 			main.cpp
 

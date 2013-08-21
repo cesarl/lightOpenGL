@@ -11,48 +11,22 @@
 #include				"ResourceManager.hpp"
 #include				"MainManager.hpp"
 #include				"Camera.hpp"
+
+#include				"Light.hpp"
+
 #include				<exception>
 
-GLfloat cubeVertices[] =
-  {
-    1,1,1,
-    -1,1,1,
-    -1,-1,1,
-    1,-1,1,
-    1, 1, -1,
-    -1, 1, -1,
-    -1, -1, -1,
-    1, -1, -1,
-  };
+ObjModelMediaPtr			model;
+ObjModelMediaPtr			cat;
 
-GLfloat cubeColours[] =
-  {
-    1, 0, 0,
-    0, 1, 0,
-    0, 1, 0,
-    1, 0, 0,
-    0, 0, 1,
-    1, 1, 0,
-    1, 1, 0,
-    0, 0, 1,
-  };
-
-GLubyte cubeIndices[] =
-  {
-    0, 1, 2, 3,
-    0, 4, 7, 3,
-    4, 5, 6, 7,
-    1, 2, 6, 5,
-    2, 3, 7, 6,
-    0, 1, 5, 4
-  };
-
-glm::vec3 rotation;
+Light					light1;
+Light					light2;
+Light					light3;
 
 void					update(float time, const ALLEGRO_EVENT &ev)
 {
   camera.input(time, ev);
-  rotation += glm::vec3(10.0f, 15.0f, 5.0f) / 100.0f;
+
 }
 
 void					draw(float time, const ALLEGRO_EVENT &ev)
@@ -60,39 +34,24 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
   camera.update(time, ev);
 
   ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("basic.prgm");
-  glUseProgram(s->getId());
+  // glUseProgram(s->getId());
 
-  ////////////////////////////
-  // myBlueTintUniform code //
-  ////////////////////////////
-
-  // static float blue = 0.0f;
-  // glUniform1f(s->getUniformId("myBlueTint"), blue);
-  // blue += 0.001f;
-  // if (blue > 1.0f)
-  //   blue = 0.0f;
-
+  glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
+  model->addLight(light1);
+  model->addLight(light2);
+  model->addLight(light3);
+  model->render();
+  glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
+  cat->addLight(light1);
+  cat->addLight(light2);
+  cat->addLight(light3);
   glPushMatrix();
-  glTranslatef(0.0f, 0.0f, 0.0f);
-  glScalef(30.0f, 30.0f, 30.0f);
-  glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
-  glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
-  glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
-
-  glEnableVertexAttribArray(s->getAttribId("myColor"));
-  glVertexAttribPointer(s->getAttribId("myColor"),
-		      3,
-		      GL_FLOAT,
-		      GL_TRUE,
-		      0,
-		      cubeColours);
-
-  glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, cubeIndices);
-
-  glDisableVertexAttribArray(s->getAttribId("myColor"));
-
+  glTranslatef(50, 0, -50);
+  cat->render();
   glPopMatrix();
-  glUseProgram(0);
+  glBindTexture(GL_TEXTURE_2D, 0);
+
+  // glUseProgram(0);
 }
 
 int					main()
@@ -110,7 +69,7 @@ int					main()
   // main //
   //////////
 
-  MediaManager::getInstance().registerLoader(new ImageLoader, ".jpg,.png,.jpeg");
+  MediaManager::getInstance().registerLoader(new ImageLoader, ".jpg,.png,.jpeg,.tga");
   MediaManager::getInstance().registerLoader(new ShaderLoader, ".vert,.pix");
   MediaManager::getInstance().registerLoader(new ShaderProgramLoader, ".prgm");
   MediaManager::getInstance().registerLoader(new ObjLoader, ".obj");
@@ -121,23 +80,21 @@ int					main()
   EventManager::getInstance().setDrawLoop(draw);
   EventManager::getInstance().setUpdateLoop(update);
 
+  light1.radius = 100;
+  light1.color = glm::vec3(0.7, 0.5, 0);
+  light1.position = glm::vec3(5, 5, 0);
+  light2.radius = 100;
+  light2.color = glm::vec3(0.1, 0.3, 0.8);
+  light2.position = glm::vec3(-5, -5, 0);
+  light3.radius = 50;
+  light3.color = glm::vec3(1, 1, 1);
+  light3.position = glm::vec3(0, -10, 2);
+
   try
     {
-
-      //////////////////////////////////////////////////////////////////////////////////
-      // uncomment that 3 lines if you dont want to pass color as attribute to shader //
-      //////////////////////////////////////////////////////////////////////////////////
-
-      glEnableClientState(GL_VERTEX_ARRAY);
-      // glEnableClientState(GL_COLOR_ARRAY);
-
-      glVertexPointer(3, GL_FLOAT, 0, cubeVertices);
-      // glColorPointer(3, GL_FLOAT, 0, cubeColours);
-
+      model = ResourceManager::getInstance().get<ObjModelMedia>("goose.obj");
+      cat = ResourceManager::getInstance().get<ObjModelMedia>("cat.obj");
       EventManager::getInstance().play();
-
-      // glDisableClientState(GL_COLOR_ARRAY);
-      glDisableClientState(GL_VERTEX_ARRAY);
     }
   catch (const std::exception &e)
     {
