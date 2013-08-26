@@ -29,8 +29,11 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
 {
   camera.update(time, ev);
 
-  // ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("DirectionalLight.prgm");
-  // glUseProgram(s->getId());
+  ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("basic.prgm");
+  glUseProgram(s->getId());
+
+  GBufferManager::getInstance().bindForWriting();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
 
   glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
   model->render();
@@ -40,7 +43,29 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
   cat->render();
   glPopMatrix();
   glBindTexture(GL_TEXTURE_2D, 0);
-  // glUseProgram(0);
+
+  glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  GBufferManager::getInstance().bindForReading();
+
+  GLint HalfWidth = (GLint)(1334 / 2.0f);
+  GLint HalfHeight = (GLint)(704 / 2.0f);
+  GLint w = 1334;
+  GLint h = 704;
+        
+  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_POSITION);
+  glBlitFramebuffer(0, 0, 1334, 704, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_DIFFUSE);
+  glBlitFramebuffer(0, 0, 1334, 704, 0, HalfHeight, HalfWidth, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_NORMAL);
+  glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, HalfHeight, w, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_NORMAL);
+  glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, 0, w, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+  glUseProgram(0);
 }
 
 int					main()
@@ -81,5 +106,7 @@ int					main()
     {
       ILogger::log(e.what());
     }
+  EventManager::getInstance().uninit();
+  GBufferManager::getInstance().uninit();
   return 0;
 }

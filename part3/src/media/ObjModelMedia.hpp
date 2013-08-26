@@ -9,65 +9,76 @@
 #include				"SmartPointer.hpp"
 #include				"SmartPointerPolicies.hpp"
 #include				"Vector3d.hh"
-#include				"Light.hpp"
 
 class					ObjModelMedia : public Resource
 {
 public:
-  struct				Face
-  {
-    glm::vec3				vertexIndex;
-    glm::vec2				texCoordIndex;
-    glm::vec3				normalIndex;
-  };
-
-  ObjModelMedia(std::vector<glm::vec3> & vertex,
-		std::vector<glm::vec2> & texCoords,
-		std::vector<glm::vec3> & normals,
-		std::vector<Face> & faces,
-		std::string const & name, bool force) :
+  ObjModelMedia(GLuint vertices,
+	   GLuint uvs,
+	   unsigned int verticesNumber,
+	   std::string const & name, bool force) :
     Resource(name, force),
-    vertex_(vertex),
-    texCoords_(texCoords),
-    normals_(normals),
-    faces_(faces)
+    vertices_(vertices),
+    uvs_(uvs),
+    verticesNumber_(verticesNumber)
   {
   }
 
   virtual void				operator=(ObjModelMedia & o)
   {
-    vertex_ = o.vertex_;
-    texCoords_ = o.texCoords_;
-    normals_ = o.normals_;
-    faces_ = o.faces_;
+    vertices_ = o.vertices_;
+    uvs_ = o.uvs_;
+    verticesNumber_ = o.verticesNumber_;
+  }
+
+  virtual ~ObjModelMedia()
+  {
+    glDeleteBuffers(1, &vertices_);
+    glDeleteBuffers(1, &uvs_);
   }
 
   void					render()
   {
     glPushMatrix();
-    glScalef(100.0f,100.0f,100.0f);
-    glBegin(GL_TRIANGLES);
-    glColor3f(1,1,1);
-    for(unsigned int i = 0;i < faces_.size(); i++)
-      {
-	glTexCoord2f(texCoords_[i].x, texCoords_[i].y);
-	glVertex3f(vertex_[i].x, vertex_[i].y, vertex_[i].z);
-      }
-    glEnd();
+    glScalef(100, 100, 100);
+    glColor4f(1,1,1,1);
+    glBindBuffer(GL_ARRAY_BUFFER, vertices_);    
+
+    glVertexPointer(3, GL_FLOAT, 0, (void*)(0));
+
+    glBindBuffer(GL_ARRAY_BUFFER, uvs_);
+    glTexCoordPointer(2, GL_FLOAT, 0, (void*)(0));
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glDrawArrays(GL_TRIANGLES, 0, verticesNumber_);
+
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);    
     glPopMatrix();
   }
 
-  virtual ~ObjModelMedia()
+  unsigned int				getVerticesNumber() const
   {
-    // glDeleteBuffers(1, &vertices_);
-    // glDeleteBuffers(1, &uvs_);
+    return verticesNumber_;
   }
 
+  GLuint				getVertexBuffer() const
+  {
+    return vertices_;
+  }
+
+  GLuint				getUvBuffer() const
+  {
+    return uvs_;
+  }
 private:
-  std::vector<glm::vec3>		vertex_;
-  std::vector<glm::vec2>		texCoords_;
-  std::vector<glm::vec3>		normals_;
-  std::vector<Face>			faces_;
+  GLuint			vertices_;
+  GLuint			uvs_;
+  unsigned int			verticesNumber_;
 };
 
 typedef					SmartPtr<ObjModelMedia, InternalRef> ObjModelMediaPtr;

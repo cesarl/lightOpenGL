@@ -23,10 +23,11 @@ public:
 
   virtual ObjModelMedia			*load(const File &file, bool force = false)
   {
-    std::vector<glm::vec3>		vertex;
-    std::vector<glm::vec2>		texCoord;
-    std::vector<glm::vec3>		normals;
-    std::vector<ObjModelMedia::Face>	faces;
+
+
+    std::vector<glm::vec3>		resVertices;
+    std::vector<glm::vec2>		resUvs;
+    std::vector<glm::vec3>		resNormals;
 
     std::string inputfile = file.getFullName();
     std::vector<tinyobj::shape_t> shapes;
@@ -44,52 +45,40 @@ public:
       {
 	for (size_t v = 0; v < shapes[i].mesh.indices.size(); v++)
 	  {
-	    ObjModelMedia::Face		f;
-
 	    if (shapes[i].mesh.positions.size() > 0)
-	      {
-		vertex.push_back(glm::vec3(shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 0],
-					   shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 1],
-					   shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 2]));
-		f.vertexIndex = glm::vec3(shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 0],
-					  shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 1],
-					  shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 2]);
-	      }
+	      resVertices.push_back(glm::vec3(shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 0],
+					      shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 1],
+					      shapes[i].mesh.positions[shapes[i].mesh.indices[v] * 3 + 2]));
 	    if (shapes[i].mesh.normals.size() > 0)
-	      {
-		normals.push_back(glm::vec3(shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 0],
-					    shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 1],
-					    shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 2]));
-		f.normalIndex = glm::vec3(shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 0],
-				      shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 1],
-				      shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 2]);
-	      }
+	      resNormals.push_back(glm::vec3(shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 0],
+					     shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 1],
+					     shapes[i].mesh.normals[shapes[i].mesh.indices[v] * 3 + 2]));
 	    if (shapes[i].mesh.texcoords.size() > 0)
-	      {
-		texCoord.push_back(glm::vec2(shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 0],
-					     shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 1]));
-		f.texCoordIndex = glm::vec2(shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 0],
-					    shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 1]);
-	      }
-	    faces.push_back(f);
+	      resUvs.push_back(glm::vec2(shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 0],
+					 shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 1]));
 	  }
+	// std::map<std::string, std::string>::iterator it(shapes[i].material.unknown_parameter.begin());
+	// std::map<std::string, std::string>::iterator itEnd(shapes[i].material.unknown_parameter.end());
+	// for (; it != itEnd; it++) {
+	//   printf("  material.%s = %s\n", it->first.c_str(), it->second.c_str());
+	// }
+	printf("\n");
       }
 
-    // GLuint				vertexBuffer;
+    GLuint				vertexBuffer;
 
-    // glGenBuffers(1, &vertexBuffer);
-    // glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    // glBufferData(GL_ARRAY_BUFFER, vertex.size() * sizeof(glm::vec3), &vertex[0], GL_STATIC_DRAW);
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, resVertices.size() * sizeof(glm::vec3), &resVertices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    // GLuint				uvBuffer;
+    GLuint				uvBuffer;
 
-    // glGenBuffers(1, &uvBuffer);
-    // glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
-    // glBufferData(GL_ARRAY_BUFFER, texCoord.size() * sizeof(glm::vec2), &texCoord[0], GL_STATIC_DRAW);
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-    // return new ObjModelMedia(vertexBuffer, uvBuffer, vertex.size(), file.getFileName(), force);
-    return new ObjModelMedia(vertex, texCoord, normals, faces, file.getFileName(), force);
+    glGenBuffers(1, &uvBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
+    glBufferData(GL_ARRAY_BUFFER, resUvs.size() * sizeof(glm::vec2), &resUvs[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    return new ObjModelMedia(vertexBuffer, uvBuffer, resVertices.size(), file.getFileName(), force);
   }
   virtual void				save(const ObjModelMedia *, const std::string &name)
   {

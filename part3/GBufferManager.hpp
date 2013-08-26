@@ -7,6 +7,7 @@
 
 class				GBufferManager : public Singleton<GBufferManager>
 {
+public:
   enum				GB_TEXTURE_TYPE
     {
       GB_TEXTURE_TYPE_POSITION = 0,
@@ -16,9 +17,20 @@ class				GBufferManager : public Singleton<GBufferManager>
       GB_TEXTURE_TYPE_NUMBER = 4
     };
 
-public:
   virtual ~GBufferManager()
-  {}
+  {
+    uninit();
+  }
+
+  void				uninit()
+  {
+    if (fbo_ != 0)
+      glDeleteFramebuffers(1, &fbo_);
+    if (textures_[0] != 0)
+      glDeleteTextures(GB_TEXTURE_TYPE_NUMBER, textures_);
+    if (depthTexture_ != 0)
+      glDeleteTextures(1, &depthTexture_);
+  }
 
   bool				init(unsigned int width, unsigned int height)
   {
@@ -46,6 +58,7 @@ public:
     if (status != GL_FRAMEBUFFER_COMPLETE)
       {
 	std::cerr << "Framebuffer error : " << status << std::endl;
+	// todo : TROW AN EXCEPTION
 	return false;
       }
 
@@ -54,10 +67,19 @@ public:
   }
 
   void				bindForWriting()
-  {}
+  {
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo_);
+  }
 
   void				bindForReading()
-  {}
+  {
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo_);
+  }
+
+  void				setReadBuffer(GB_TEXTURE_TYPE type)
+  {
+    glReadBuffer(GL_COLOR_ATTACHMENT0 + type);
+  }
 
 private:
   GLuint			fbo_;
