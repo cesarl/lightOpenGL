@@ -68,7 +68,7 @@ public:
 
   void				bindForWriting()
   {
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo_);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo_);
   }
 
   void				bindForReading()

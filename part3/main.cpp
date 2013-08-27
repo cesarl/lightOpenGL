@@ -29,22 +29,26 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
 {
   camera.update(time, ev);
 
-  ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("basic.prgm");
+  ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("deferred.prgm");
   glUseProgram(s->getId());
 
   GBufferManager::getInstance().bindForWriting();
+
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
 
   glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
+
   model->render();
   glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
   glPushMatrix();
   glTranslatef(50, 0, -50);
+
   cat->render();
   glPopMatrix();
   glBindTexture(GL_TEXTURE_2D, 0);
 
-  glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   GBufferManager::getInstance().bindForReading();
 
@@ -62,7 +66,7 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
   GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_NORMAL);
   glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, HalfHeight, w, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
-  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_NORMAL);
+  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_TEXCOORD);
   glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, 0, w, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
   glUseProgram(0);
