@@ -1,2 +1,2 @@
 VERTEX       deferred.vert
-//PIXEL        deferred.pix
+PIXEL        deferred.pix

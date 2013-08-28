@@ -30,7 +30,7 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
   camera.update(time, ev);
 
   ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("deferred.prgm");
-  //glUseProgram(s->getId());
+  glUseProgram(s->getId());
 
   // GBufferManager::getInstance().bindForWriting();
 
@@ -40,13 +40,13 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
   glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
 
   model->render();
-  glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
-  glPushMatrix();
-  glTranslatef(50, 0, -50);
+  // glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
+  // glPushMatrix();
+  // glTranslatef(50, 0, -50);
 
-  cat->render();
-  glPopMatrix();
-  glBindTexture(GL_TEXTURE_2D, 0);
+  // cat->render();
+  // glPopMatrix();
+  // glBindTexture(GL_TEXTURE_2D, 0);
 
   // glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -98,7 +98,7 @@ int					main()
   EventManager::getInstance().setDrawLoop(draw);
   EventManager::getInstance().setUpdateLoop(update);
 
-  GBufferManager::getInstance().init(1344, 704);
+  // GBufferManager::getInstance().init(1344, 704);
 
   try
     {
@@ -111,6 +111,6 @@ int					main()
       ILogger::log(e.what());
     }
   EventManager::getInstance().uninit();
-  GBufferManager::getInstance().uninit();
+  // GBufferManager::getInstance().uninit();
   return 0;
 }

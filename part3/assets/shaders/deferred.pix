@@ -1,44 +1,52 @@
-uniform sampler2D tex;
+/* uniform sampler2D tex; */
 
-layout (location = 0) out vec3 def_p; //  GL_COLOR_ATTACHMENT0
-layout (location = 1) out vec3 def_n; //  GL_COLOR_ATTACHMENT1
-layout (location = 2) out vec3 def_m; //  GL_COLOR_ATTACHMENT2
-layout (location = 3) out vec3 def_j; //  GL_COLOR_ATTACHMENT3
+/* in vec3 vertices; */
+/* in vec3 normals; */
+/* in vec2 u; */
 
-/* layout(location = 0) in vec3 vertices; */
-/* layout(location = 1) in vec3 normals; */
-/* layout(location = 2) in vec2 uvs; */
+/* layout (location = 0) out vec3 def_p; //  GL_COLOR_ATTACHMENT0 */
+/* layout (location = 1) out vec3 def_n; //  GL_COLOR_ATTACHMENT1 */
+/* layout (location = 2) out vec3 def_m; //  GL_COLOR_ATTACHMENT2 */
+/* layout (location = 3) out vec3 def_j; //  GL_COLOR_ATTACHMENT3 */
 
-in vec2 u;
+/* /\* layout(location = 0) in vec3 vertices; *\/ */
+/* /\* layout(location = 1) in vec3 normals; *\/ */
+/* /\* layout(location = 2) in vec2 uvs; *\/ */
+
+/* void main() */
+/* { */
+/*   /\* def_p = vec4(1.0f, 0.0f, 0.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); *\/ */
+/*   /\* def_n = vec4(0.0f, 1.0f, 0.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); *\/ */
+/*   /\* def_m = vec4(0.0f, 0.0f, 1.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); *\/ */
+/*   /\* def_j = vec4(1.0f, 0.0f, 1.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); *\/ */
+
+/*   def_p = vec4(1.0f, 0.0f, 0.0f, 1.0f) * texture2D(tex, u); */
+/*   def_n = vec4(0.0f, 1.0f, 0.0f, 1.0f); */
+/*   def_m = vec4(0.0f, 0.0f, 1.0f, 1.0f); */
+/*   def_j = vec4(1.0f, 0.0f, 1.0f, 1.0f); */
+/* } */
+
+
+//Texture Unit
+uniform sampler2D LTextureUnit;
+
+#if __VERSION__ >= 130
+
+//Texture coordinate
+in vec2 texCoord;
+
+//Final color
+out vec4 gl_FragColor;
+
+#else
+
+//Texture coordinate
+varying vec2 texCoord;
+
+#endif
 
 void main()
 {
-
-  /* def_p = texture(tex, normals); */
-  /* def_p = texture2D(tex, uvs); */
-  def_p = vec4(1,0,0,1);
-  def_n = vec4(0,1,0,1);
-  def_m = vec4(1,0,1,1);
-  gl_FragColor = vec4(1,0,0,1); //texture2D(tex, u);
-
-  /* gl_FragData[0] = vec4(1.0f, 0.0f, 0.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-  /* gl_FragData[1] = vec4(0.0f, 1.0f, 0.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-  /* gl_FragData[2] = vec4(0.0f, 0.0f, 1.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-  /* gl_FragData[3] = vec4(1.0f, 0.0f, 1.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-
-  /* def_p = vec4(1.0f, 0.0f, 0.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-  /* def_n = vec4(0.0f, 1.0f, 0.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-  /* def_m = vec4(0.0f, 0.0f, 1.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-  /* def_j = vec4(1.0f, 0.0f, 1.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-
-  /* def_p = vec4(vertices.xyz, 1.0f); */
-  /* def_n = vec4(normals.xyz, 1.0f); */
-  /* def_m = vec4(uvs.xy, 1.0f, 1.0f); */
-
-  /* def_n = vec4(0.0f, 1.0f, 0.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-  /* def_m = vec4(0.0f, 0.0f, 1.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-  /* def_j = vec4(1.0f, 0.0f, 1.0f, 1.0f) + texture2D(tex, gl_TexCoord[0].st); */
-
-  //  gl_FragColor[0] = texture2D(gl_TexCoord[0], def_p);
-  /* gl_FragColor[1] = gl_Color + texture2D(tex, gl_TexCoord[0].st); */
+  //Set fragment
+  gl_FragColor = texture( LTextureUnit, texCoord );
 }
