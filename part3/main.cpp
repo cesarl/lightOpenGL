@@ -22,14 +22,27 @@ ObjModelMediaPtr			cat;
 void					update(float time, const ALLEGRO_EVENT &ev)
 {
   camera.input(time, ev);
-
 }
 
 void					draw(float time, const ALLEGRO_EVENT &ev)
 {
   camera.update(time, ev);
-
   ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("deferred.prgm");
+
+  glBegin(GL_QUADS);
+  glColor3d(1,0,0);
+  glVertex3f(-10,-10,-10);
+  glColor3d(1,1,0);
+  glVertex3f(10,-10,-10);
+  glColor3d(1,1,1);
+  glVertex3f(10,10,-10);
+  glColor3d(0,1,1);
+  glVertex3f(-10,10,-10);
+  glEnd();
+
+  // std::cout << "vert " << glGetAttribLocation(s->getId(), "vertices") << " " << std::endl;
+  // std::cout << "uvs " << glGetAttribLocation(s->getId(), "uvs") << std::endl;
+  // std::cout << "norm " << glGetAttribLocation(s->getId(), "normals") << std::endl;
   glUseProgram(s->getId());
 
   // GBufferManager::getInstance().bindForWriting();
@@ -102,8 +115,9 @@ int					main()
 
   try
     {
+      ResourceManager::getInstance().get<ShaderProgramMedia>("deferred.prgm");
       model = ResourceManager::getInstance().get<ObjModelMedia>("goose.obj");
-      cat = ResourceManager::getInstance().get<ObjModelMedia>("cat.obj");
+      // cat = ResourceManager::getInstance().get<ObjModelMedia>("cat.obj");
       EventManager::getInstance().play();
     }
   catch (const std::exception &e)

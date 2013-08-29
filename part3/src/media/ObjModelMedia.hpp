@@ -43,29 +43,28 @@ public:
   {
     glPushMatrix();
     glScalef(100, 100, 100);
-    glColor4f(1,1,1,1);
-
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertices_);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // glColor4f(1,1,1,1);
 
     glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER, normals_);    
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
     glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
+
+    glBindBuffer(GL_ARRAY_BUFFER, normals_);    
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
+
     glBindBuffer(GL_ARRAY_BUFFER, uvs_);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)(0));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, (void*)(0));
+
+    glBindBuffer(GL_ARRAY_BUFFER, vertices_);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
 
     glDrawArrays(GL_TRIANGLES, 0, verticesNumber_);
 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glPopMatrix();
-    glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
+    glDisableVertexAttribArray(3);
   }
 
   unsigned int				getVerticesNumber() const

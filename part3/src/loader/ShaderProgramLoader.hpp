@@ -77,11 +77,9 @@ std::map<std::string, std::string>	textures;
     // hardcoded for the moment //
     //////////////////////////////
 
-    glBindAttribLocation(id, 0, "vertices");
-    glBindAttribLocation(id, 1, "normals");
-    glBindAttribLocation(id, 2, "uvs");
-
-
+    glBindAttribLocation(id, 1, "vertices");
+    glBindAttribLocation(id, 2, "normals");
+    glBindAttribLocation(id, 3, "uvs");
     
     glLinkProgram(id);
 
