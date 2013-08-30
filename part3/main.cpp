@@ -44,15 +44,28 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
   // std::cout << "uvs " << glGetAttribLocation(s->getId(), "uvs") << std::endl;
   // std::cout << "norm " << glGetAttribLocation(s->getId(), "normals") << std::endl;
   glUseProgram(s->getId());
+  if (glGetError() != GL_NO_ERROR)
+    {
+      std::cout << "A" << std::endl;
+    }
 
   // GBufferManager::getInstance().bindForWriting();
 
   // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
 
   // glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
+  // glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
+  if (glGetError() != GL_NO_ERROR)
+    {
+      std::cout << "B" << std::endl;
+    }
 
   model->render();
+  if (glGetError() != GL_NO_ERROR)
+    {
+      std::cout << "C" << std::endl;
+    }
+
   // glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
   // glPushMatrix();
   // glTranslatef(50, 0, -50);

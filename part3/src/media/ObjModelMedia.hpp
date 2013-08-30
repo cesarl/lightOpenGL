@@ -14,14 +14,12 @@ class					ObjModelMedia : public Resource
 {
 public:
   ObjModelMedia(GLuint vertices,
-		GLuint uvs,
-		GLuint normals,
 		unsigned int verticesNumber,
 		std::string const & name, bool force) :
     Resource(name, force),
     vertices_(vertices),
-    uvs_(uvs),
-    normals_(normals),
+    uvs_(0),
+    normals_(0),
     verticesNumber_(verticesNumber)
   {
   }
@@ -36,35 +34,18 @@ public:
   virtual ~ObjModelMedia()
   {
     glDeleteBuffers(1, &vertices_);
-    glDeleteBuffers(1, &uvs_);
+    // glDeleteBuffers(1, &uvs_);
   }
 
   void					render()
   {
-    glPushMatrix();
-    glScalef(100, 100, 100);
-    // glColor4f(1,1,1,1);
-
-    glEnableVertexAttribArray(1);
-    glEnableVertexAttribArray(2);
-    glEnableVertexAttribArray(3);
-
-    glBindBuffer(GL_ARRAY_BUFFER, normals_);    
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
-
-    glBindBuffer(GL_ARRAY_BUFFER, uvs_);
-    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, (void*)(0));
-
-    glBindBuffer(GL_ARRAY_BUFFER, vertices_);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
-
+    glEnableVertexAttribArray(10);
+    // glBindBuffer(GL_ARRAY_BUFFER, vertices_);
+    // glBindVertexArray( vertices_);
+    glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
     glDrawArrays(GL_TRIANGLES, 0, verticesNumber_);
-
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glPopMatrix();
-    glDisableVertexAttribArray(1);
-    glDisableVertexAttribArray(2);
-    glDisableVertexAttribArray(3);
+    // glDisableVertexAttribArray(10);
   }
 
   unsigned int				getVerticesNumber() const
