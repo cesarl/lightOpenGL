@@ -1,23 +1,7 @@
-//Texture Unit
-/* uniform sampler2D LTextureUnit; */
-
-#if __VERSION__ >= 130
-
-//Texture coordinate
-/* in vec2 texCoord; */
-
-//Final color
-out vec4 gl_FragColor;
-
-#else
-
-//Texture coordinate
-/* varying vec2 texCoord; */
-
-#endif
-
 void main()
 {
-  //Set fragment
-  gl_FragColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);//texture( LTextureUnit, texCoord);
+  gl_FragColor[0] = 0.0;
+  gl_FragColor[1] = 0.5;
+  gl_FragColor[2] = 1.0;
+  gl_FragColor[3] = 1.0;
 }

@@ -71,13 +71,13 @@ std::map<std::string, std::string>	textures;
 	  }
       }    
 
-    program->setTextures(textures);
+    // program->setTextures(textures);
 
     //////////////////////////////
     // hardcoded for the moment //
     //////////////////////////////
 
-    glBindAttribLocation(id, 10, "vertices");
+    // glBindAttribLocation(id, 10, "vertices");
     // glBindAttribLocation(id, 2, "normals");
     // glBindAttribLocation(id, 3, "uvs");
     

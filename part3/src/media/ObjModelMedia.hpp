@@ -39,13 +39,22 @@ public:
 
   void					render()
   {
+    
     glEnableVertexAttribArray(10);
     // glBindBuffer(GL_ARRAY_BUFFER, vertices_);
-    // glBindVertexArray( vertices_);
-    glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
-    glDrawArrays(GL_TRIANGLES, 0, verticesNumber_);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    // glDisableVertexAttribArray(10);
+    GLfloat triangle_vertices[] = {
+      -10.0,  10, 0,
+      -10, -10, 0,
+      10, -10, 0
+    };
+    // glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
+
+    glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, 0, triangle_vertices);
+
+
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    // glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glDisableVertexAttribArray(10);
   }
 
   unsigned int				getVerticesNumber() const

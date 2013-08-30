@@ -1,16 +1,5 @@
-//Vertex position attribute
-layout (location = 10) in vec3 vertices;
+attribute vec3 vertices;
 
-//Texture coordinate attribute
-/* in vec2 uvs; */
-/* out vec2 texCoord; */
-
-
-void main()
-{
-  //Process texCoord
-  /* texCoord = uvs; */
-  
-  //Process vertex
-  gl_Position = ftransform() * vec4( vertices.x, vertices.y, vertices.z, 1.0 );
+void main(void) {
+  gl_Position = vec4(vertices, 1.0);
 }

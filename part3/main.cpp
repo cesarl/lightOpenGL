@@ -18,6 +18,7 @@
 #include				<exception>
 ObjModelMediaPtr			model;
 ObjModelMediaPtr			cat;
+GLuint					vbo;
 
 void					update(float time, const ALLEGRO_EVENT &ev)
 {
@@ -27,74 +28,42 @@ void					update(float time, const ALLEGRO_EVENT &ev)
 void					draw(float time, const ALLEGRO_EVENT &ev)
 {
   camera.update(time, ev);
-  ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("deferred.prgm");
+  ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("basic.prgm");
+
+  // glUseProgram(s->getId());
+
+  glUniformMatrix4fv(glGetAttribLocation(s->getId(), "matrix"), 1, GL_FALSE, glm::value_ptr(camera.getMvp()));
+  // std::cout << camera.getMvp()[0].x << " " <<  std::endl;
+
 
   glBegin(GL_QUADS);
   glColor3d(1,0,0);
-  glVertex3f(-10,-10,-10);
+  glVertex3f(-10,-10,1);
   glColor3d(1,1,0);
-  glVertex3f(10,-10,-10);
-  glColor3d(1,1,1);
-  glVertex3f(10,10,-10);
+  glVertex3f(10,-10,1);
+  glColor3d(0,1,0);
+  glVertex3f(10,10,1);
   glColor3d(0,1,1);
-  glVertex3f(-10,10,-10);
+  glVertex3f(-10,10,1);
   glEnd();
 
-  // std::cout << "vert " << glGetAttribLocation(s->getId(), "vertices") << " " << std::endl;
-  // std::cout << "uvs " << glGetAttribLocation(s->getId(), "uvs") << std::endl;
-  // std::cout << "norm " << glGetAttribLocation(s->getId(), "normals") << std::endl;
-  glUseProgram(s->getId());
-  if (glGetError() != GL_NO_ERROR)
-    {
-      std::cout << "A" << std::endl;
-    }
+  glBegin(GL_QUADS);
+  glColor3d(1,0,0);
+  glVertex3f(-1,-1,1);
+  glColor3d(1,1,0);
+  glVertex3f(1,-1,-1);
+  glColor3d(0,1,0);
+  glVertex3f(1,1,1);
+  glColor3d(0,1,1);
+  glVertex3f(-1,1,1);
+  glEnd();
 
-  // GBufferManager::getInstance().bindForWriting();
 
-  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  
-
-  // glActiveTexture(GL_TEXTURE0);
-  // glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
-  if (glGetError() != GL_NO_ERROR)
-    {
-      std::cout << "B" << std::endl;
-    }
-
-  model->render();
-  if (glGetError() != GL_NO_ERROR)
-    {
-      std::cout << "C" << std::endl;
-    }
-
-  // glBindTexture(GL_TEXTURE_2D, ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
-  // glPushMatrix();
-  // glTranslatef(50, 0, -50);
-
-  // cat->render();
-  // glPopMatrix();
-  // glBindTexture(GL_TEXTURE_2D, 0);
-
-  // glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  // GBufferManager::getInstance().bindForReading();
-
-  // GLint HalfWidth = (GLint)(1334 / 2.0f);
-  // GLint HalfHeight = (GLint)(704 / 2.0f);
-  // GLint w = 1334;
-  // GLint h = 704;
-        
-  // GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_POSITION);
-  // glBlitFramebuffer(0, 0, 1334, 704, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-  // GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_DIFFUSE);
-  // glBlitFramebuffer(0, 0, 1334, 704, 0, HalfHeight, HalfWidth, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-  // GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_NORMAL);
-  // glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, HalfHeight, w, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
-
-  // GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_TEXCOORD);
-  // glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, 0, w, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+  // glEnableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
+  // glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  // glVertexAttribPointer(glGetAttribLocation(s->getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+  // glDrawArrays(GL_TRIANGLES, 0, 3);
+  // glDisableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
   glUseProgram(0);
 }
 
@@ -125,6 +94,17 @@ int					main()
   EventManager::getInstance().setUpdateLoop(update);
 
   // GBufferManager::getInstance().init(1344, 704);
+
+  GLfloat triangle_vertices[] = {
+    -10.0,  10, 4,
+    -10, -10, 4,
+    10, -10, 4
+  };
+
+  glGenBuffers(1, &vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   try
     {
