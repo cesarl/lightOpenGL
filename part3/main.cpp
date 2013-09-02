@@ -28,7 +28,7 @@ void					update(float time, const ALLEGRO_EVENT &ev)
 void					draw(float time, const ALLEGRO_EVENT &ev)
 {
   camera.update(time, ev);
-  ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("basic.prgm");
+  ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("deferred.prgm");
 
   // glUseProgram(s->getId());
 
@@ -36,34 +36,34 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
   // std::cout << camera.getMvp()[0].x << " " <<  std::endl;
 
 
-  glBegin(GL_QUADS);
-  glColor3d(1,0,0);
-  glVertex3f(-10,-10,1);
-  glColor3d(1,1,0);
-  glVertex3f(10,-10,1);
-  glColor3d(0,1,0);
-  glVertex3f(10,10,1);
-  glColor3d(0,1,1);
-  glVertex3f(-10,10,1);
-  glEnd();
+  // glBegin(GL_QUADS);
+  // glColor3d(1,0,0);
+  // glVertex3f(-10,-10,1);
+  // glColor3d(1,1,0);
+  // glVertex3f(10,-10,1);
+  // glColor3d(0,1,0);
+  // glVertex3f(10,10,1);
+  // glColor3d(0,1,1);
+  // glVertex3f(-10,10,1);
+  // glEnd();
 
-  glBegin(GL_QUADS);
-  glColor3d(1,0,0);
-  glVertex3f(-1,-1,1);
-  glColor3d(1,1,0);
-  glVertex3f(1,-1,-1);
-  glColor3d(0,1,0);
-  glVertex3f(1,1,1);
-  glColor3d(0,1,1);
-  glVertex3f(-1,1,1);
-  glEnd();
+  // glBegin(GL_QUADS);
+  // glColor3d(1,0,0);
+  // glVertex3f(-1,-1,1);
+  // glColor3d(1,1,0);
+  // glVertex3f(1,-1,-1);
+  // glColor3d(0,1,0);
+  // glVertex3f(1,1,1);
+  // glColor3d(0,1,1);
+  // glVertex3f(-1,1,1);
+  // glEnd();
 
 
-  // glEnableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
-  // glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  // glVertexAttribPointer(glGetAttribLocation(s->getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-  // glDrawArrays(GL_TRIANGLES, 0, 3);
-  // glDisableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
+  glEnableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
+  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glVertexAttribPointer(glGetAttribLocation(s->getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+  glDrawArrays(GL_TRIANGLES, 0, 3);
+  glDisableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
   glUseProgram(0);
 }
 

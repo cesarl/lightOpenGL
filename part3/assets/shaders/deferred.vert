@@ -1,5 +1,6 @@
+uniform mat4 matrix;
 attribute vec3 vertices;
 
 void main(void) {
-  gl_Position = vec4(vertices, 1.0);
+  gl_Position = matrix * vec4(vertices, 1.0);
 }
