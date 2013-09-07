@@ -6,8 +6,8 @@
 #include				"Singleton.hpp"
 #include				"Camera.hpp"
 
-static Camera<Perspective, FreeFly> camera;
-//static Camera camera;
+//static Camera<Perspective, FreeFly> camera;
+static Camera camera;
 
 class					EventManager : public Singleton<EventManager>
 {
@@ -20,7 +20,7 @@ public:
     static int				frames_done = 0;
     static double			old_time = al_get_time();
 
-    camera.update(time, ev);
+    // camera.update(time, ev);
 
     if(time - old_time >= 1.0)
       {
@@ -30,6 +30,8 @@ public:
 	std::cout << "FPS : " << fps << " || TIME : " << old_time << std::endl;
       }
     frames_done++;
+    (void)ev;
+    (void)time;
   }
 
 
@@ -47,8 +49,8 @@ public:
       return false;
     if (!al_install_joystick())
       return false;
-    if (!camera.init())
-      return false;
+    // if (!camera.init())
+    //   return false;
     al_register_event_source(this->event_queue_, al_get_keyboard_event_source());
     // al_register_event_source(this->event_queue_, al_get_joystick_event_source());
     al_register_event_source(this->event_queue_, al_get_mouse_event_source());
@@ -91,7 +93,7 @@ public:
 	  }
 	else
 	  {
-	    camera.input(time, ev);
+	    // camera.input(time, ev);
 	  }
 	if (canDraw && al_is_event_queue_empty(this->event_queue_))
 	  {

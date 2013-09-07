@@ -1,4 +1,5 @@
 #include				<glm/glm.hpp>
+#include				<glm/gtc/matrix_transform.hpp>
 
 #include				"Logger.hpp"
 
@@ -22,42 +23,16 @@ GLuint					vbo;
 
 void					update(float time, const ALLEGRO_EVENT &ev)
 {
-  camera.input(time, ev);
+  camera.update(time, ev);
 }
 
 void					draw(float time, const ALLEGRO_EVENT &ev)
 {
-  camera.update(time, ev);
   ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("deferred.prgm");
 
-  // glUseProgram(s->getId());
+  glUseProgram(s->getId());
 
-  glUniformMatrix4fv(glGetAttribLocation(s->getId(), "matrix"), 1, GL_FALSE, glm::value_ptr(camera.getMvp()));
-  // std::cout << camera.getMvp()[0].x << " " <<  std::endl;
-
-
-  // glBegin(GL_QUADS);
-  // glColor3d(1,0,0);
-  // glVertex3f(-10,-10,1);
-  // glColor3d(1,1,0);
-  // glVertex3f(10,-10,1);
-  // glColor3d(0,1,0);
-  // glVertex3f(10,10,1);
-  // glColor3d(0,1,1);
-  // glVertex3f(-10,10,1);
-  // glEnd();
-
-  // glBegin(GL_QUADS);
-  // glColor3d(1,0,0);
-  // glVertex3f(-1,-1,1);
-  // glColor3d(1,1,0);
-  // glVertex3f(1,-1,-1);
-  // glColor3d(0,1,0);
-  // glVertex3f(1,1,1);
-  // glColor3d(0,1,1);
-  // glVertex3f(-1,1,1);
-  // glEnd();
-
+  glUniformMatrix4fv(glGetUniformLocation(s->getId(), "matrix"), 1, GL_FALSE, glm::value_ptr(camera.getMvp()));
 
   glEnableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -65,6 +40,8 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
   glDrawArrays(GL_TRIANGLES, 0, 3);
   glDisableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
   glUseProgram(0);
+  (void)ev;
+  (void)time;
 }
 
 int					main()
@@ -104,7 +81,6 @@ int					main()
   glGenBuffers(1, &vbo);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_vertices), triangle_vertices, GL_STATIC_DRAW);
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
 
   try
     {
