@@ -34,11 +34,17 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
 
   glUniformMatrix4fv(glGetUniformLocation(s->getId(), "matrix"), 1, GL_FALSE, glm::value_ptr(camera.getMvp()));
 
-  glEnableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  glVertexAttribPointer(glGetAttribLocation(s->getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-  glDrawArrays(GL_TRIANGLES, 0, 3);
-  glDisableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
+
+  // WORK !!!
+  // glEnableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
+  // glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  // glVertexAttribPointer(glGetAttribLocation(s->getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+  // glDrawArrays(GL_TRIANGLES, 0, 3);
+  // glDisableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
+  // !WORK
+
+  model->render(s);
+
   glUseProgram(0);
   (void)ev;
   (void)time;

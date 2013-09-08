@@ -37,24 +37,29 @@ public:
     // glDeleteBuffers(1, &uvs_);
   }
 
-  void					render()
+  void					render(ShaderProgramMediaPtr &s)
   {
-    
-    glEnableVertexAttribArray(10);
-    // glBindBuffer(GL_ARRAY_BUFFER, vertices_);
-    GLfloat triangle_vertices[] = {
-      -10.0,  10, 0,
-      -10, -10, 0,
-      10, -10, 0
-    };
-    // glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
+    glEnableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
+    glBindBuffer(GL_ARRAY_BUFFER, vertices_);
+    glVertexAttribPointer(glGetAttribLocation(s->getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glDrawArrays(GL_TRIANGLES, 0, verticesNumber_);
+    glDisableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
 
-    glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, 0, triangle_vertices);
+    // glEnableVertexAttribArray(10);
+    // // glBindBuffer(GL_ARRAY_BUFFER, vertices_);
+    // GLfloat triangle_vertices[] = {
+    //   -10.0,  10, 0,
+    //   -10, -10, 0,
+    //   10, -10, 0
+    // };
+    // // glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
+
+    // glVertexAttribPointer(glGetAttribLocation(s->getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, triangle_vertices);
 
 
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    // glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glDisableVertexAttribArray(10);
+    // glDrawArrays(GL_TRIANGLES, 0, 3);
+    // // glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // glDisableVertexAttribArray(10);
   }
 
   unsigned int				getVerticesNumber() const
