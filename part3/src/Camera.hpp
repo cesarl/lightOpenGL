@@ -7,6 +7,7 @@
 #include                                <allegro5/allegro.h>
 #include				<GL/glu.h>
 #include				<cmath>
+#include				<bitset>
 
 class					Camera
 {
@@ -19,6 +20,7 @@ private:
   float					fov_;
   float					speed_;
   glm::mat4				mvp_;
+  std::bitset<4>			keys_;
 public:
   Camera()
   {
@@ -41,7 +43,7 @@ public:
     al_get_mouse_state(&state);
     pos = glm::vec2(state.x, state.y);
     last -= pos;
-    horizontalAngle_ = speed_ * pos.x;
+    horizontalAngle_ = speed_ * -pos.x;
     verticalAngle_ = speed_ * pos.y;
     glm::vec3 direction(cos(verticalAngle_) * sin(horizontalAngle_),
 			sin(verticalAngle_),
@@ -52,21 +54,41 @@ public:
 
     glm::vec3 up = glm::cross(right, direction);
 
-    if (ev.type == ALLEGRO_EVENT_KEY_DOWN && ev.keyboard.keycode == ALLEGRO_KEY_W)
+    if (ev.type == ALLEGRO_EVENT_KEY_DOWN || ev.type == ALLEGRO_EVENT_KEY_UP)
+      {
+	bool val = ev.type == ALLEGRO_EVENT_KEY_DOWN ? true : false;
+	switch (ev.keyboard.keycode)
+	  {
+	  case ALLEGRO_KEY_W:
+	    keys_[0] = val;
+	    break;
+	  case ALLEGRO_KEY_S:
+	    keys_[1] = val;
+	    break;
+	  case ALLEGRO_KEY_D:
+	    keys_[2] = val;
+	    break;
+	  case ALLEGRO_KEY_A:
+	    keys_[3] = val;
+	    break;
+	  }
+      }
+
+    if (keys_[0])
       {
 	position_ += direction * time * speed_;
       }
-    if (ev.type == ALLEGRO_EVENT_KEY_DOWN && ev.keyboard.keycode == ALLEGRO_KEY_S)
+    if (keys_[1])
       {
 	position_ -= direction * time * speed_;
       }
-    if (ev.type == ALLEGRO_EVENT_KEY_DOWN && ev.keyboard.keycode == ALLEGRO_KEY_D)
-      {
-	position_ += right * time * speed_;
-      }
-    if (ev.type == ALLEGRO_EVENT_KEY_DOWN && ev.keyboard.keycode == ALLEGRO_KEY_A)
+    if (keys_[2])
       {
 	position_ -= right * time * speed_;
+      }
+    if (keys_[3])
+      {
+	position_ += right * time * speed_;
       }
 
     projection_ = glm::perspective(fov_, 4.0f / 3.0f, 0.1f, 100.0f);
