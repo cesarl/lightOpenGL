@@ -5,6 +5,7 @@
 #include				<allegro5/allegro_opengl.h>
 #include				<GL/glu.h>
 #include				<glm/glm.hpp>
+#include				"ResourceManager.hpp"
 #include				"Resource.hh"
 #include				"SmartPointer.hpp"
 #include				"SmartPointerPolicies.hpp"
@@ -14,11 +15,12 @@ class					ObjModelMedia : public Resource
 {
 public:
   ObjModelMedia(GLuint vertices,
+		GLuint uvs,
 		unsigned int verticesNumber,
 		std::string const & name, bool force) :
     Resource(name, force),
     vertices_(vertices),
-    uvs_(0),
+    uvs_(uvs),
     normals_(0),
     verticesNumber_(verticesNumber)
   {
@@ -37,13 +39,22 @@ public:
     // glDeleteBuffers(1, &uvs_);
   }
 
-  void					render(ShaderProgramMediaPtr &s)
+  void					render(ShaderProgramMediaPtr &s, GLint textureId)
   {
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glUniform1i(glGetAttribLocation(s->getId(), "myTexture"), /*GL_TEXTURE*/0);
+
     glEnableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
     glBindBuffer(GL_ARRAY_BUFFER, vertices_);
     glVertexAttribPointer(glGetAttribLocation(s->getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(glGetAttribLocation(s->getId(), "texcoord"));
+    glBindBuffer(GL_ARRAY_BUFFER, uvs_);
+    glVertexAttribPointer(glGetAttribLocation(s->getId(), "texcoord"), 2, GL_FLOAT, GL_FALSE, 0, 0);
     glDrawArrays(GL_TRIANGLES, 0, verticesNumber_);
     glDisableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
+    glDisableVertexAttribArray(glGetAttribLocation(s->getId(), "texcoord"));
 
     // glEnableVertexAttribArray(10);
     // // glBindBuffer(GL_ARRAY_BUFFER, vertices_);

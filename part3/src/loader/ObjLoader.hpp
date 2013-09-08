@@ -75,7 +75,18 @@ public:
       }
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, resVertices.size() * sizeof(glm::vec3), &resVertices[0], GL_STATIC_DRAW);
-    return new ObjModelMedia(vertexBuffer, resVertices.size(), file.getFileName(), force);
+
+    GLuint				texcoords;
+
+    glGenBuffers(1, &texcoords);
+    if (vertexBuffer <= 0)
+      {
+	std::cout << "TexCoords buffer error" << std::endl;
+      }
+    glBindBuffer(GL_ARRAY_BUFFER, texcoords);
+    glBufferData(GL_ARRAY_BUFFER, resUvs.size() * sizeof(glm::vec2), &resUvs[0], GL_STATIC_DRAW);
+
+    return new ObjModelMedia(vertexBuffer, texcoords, resVertices.size(), file.getFileName(), force);
   }
   virtual void				save(const ObjModelMedia *, const std::string &name)
   {

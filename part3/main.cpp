@@ -19,6 +19,7 @@
 #include				<exception>
 ObjModelMediaPtr			model;
 ObjModelMediaPtr			cat;
+ObjModelMediaPtr			eagle;
 GLuint					vbo;
 
 void					update(float time, const ALLEGRO_EVENT &ev)
@@ -32,18 +33,19 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
 
   glUseProgram(s->getId());
 
+  // goose
+
   glUniformMatrix4fv(glGetUniformLocation(s->getId(), "matrix"), 1, GL_FALSE, glm::value_ptr(camera.getMvp()));
 
+  model->render(s,
+		ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
 
-  // WORK !!!
-  // glEnableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
-  // glBindBuffer(GL_ARRAY_BUFFER, vbo);
-  // glVertexAttribPointer(glGetAttribLocation(s->getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-  // glDrawArrays(GL_TRIANGLES, 0, 3);
-  // glDisableVertexAttribArray(glGetAttribLocation(s->getId(), "vertices"));
-  // !WORK
 
-  model->render(s);
+  // glUniformMatrix4fv(glGetUniformLocation(s->getId(), "matrix"), 1, GL_FALSE, glm::value_ptr(camera.getMvp()));
+
+  eagle->render(s,
+		ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture());
+
 
   glUseProgram(0);
   (void)ev;
@@ -65,7 +67,7 @@ int					main()
   // main //
   //////////
 
-  MediaManager::getInstance().registerLoader(new ImageLoader, ".jpg,.png,.jpeg,.tga");
+  MediaManager::getInstance().registerLoader(new ImageLoader, ".jpg,.png,.jpeg,.tga,.tif");
   MediaManager::getInstance().registerLoader(new ShaderLoader, ".vert,.pix");
   MediaManager::getInstance().registerLoader(new ShaderProgramLoader, ".prgm");
   MediaManager::getInstance().registerLoader(new ObjLoader, ".obj");
@@ -92,7 +94,8 @@ int					main()
     {
       ResourceManager::getInstance().get<ShaderProgramMedia>("deferred.prgm");
       model = ResourceManager::getInstance().get<ObjModelMedia>("goose.obj");
-      // cat = ResourceManager::getInstance().get<ObjModelMedia>("cat.obj");
+      cat = ResourceManager::getInstance().get<ObjModelMedia>("cat.obj");
+      eagle = ResourceManager::getInstance().get<ObjModelMedia>("eagle.obj");
       EventManager::getInstance().play();
     }
   catch (const std::exception &e)
