@@ -26,7 +26,7 @@ public:
     horizontalAngle_ = 3.14f;
     verticalAngle_ = 0.0f;
     fov_ = 45.0f;
-    speed_ = 0.05f;
+    speed_ = 0.01f;
   }
 
   ~Camera()
@@ -70,7 +70,7 @@ public:
       }
 
     projection_ = glm::perspective(fov_, 4.0f / 3.0f, 0.1f, 100.0f);
-    view_ = glm::lookAt(position_, position_ + direction, up);
+    view_ = glm::lookAt(position_, position_ + direction, -up);
     mvp_ = projection_ * view_;
     last = pos;
   }
