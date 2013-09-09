@@ -14,6 +14,7 @@
 #include				"Camera.hpp"
 
 #include				"Light.hpp"
+#include				"Shader.hh"
 #include				"GBufferManager.hpp"
 
 #include				<exception>
@@ -21,6 +22,7 @@ ObjModelMediaPtr			model;
 ObjModelMediaPtr			cat;
 ObjModelMediaPtr			eagle;
 GLuint					vbo;
+Shader					modelShader;
 
 void					update(float time, const ALLEGRO_EVENT &ev)
 {
@@ -29,25 +31,13 @@ void					update(float time, const ALLEGRO_EVENT &ev)
 
 void					draw(float time, const ALLEGRO_EVENT &ev)
 {
-  ShaderProgramMediaPtr s = ResourceManager::getInstance().get<ShaderProgramMedia>("deferred.prgm");
+  ShaderManager::getInstance().render();
+  // modelShader.use();
 
-  glUseProgram(s->getId());
+  // model->render(modelShader);
+  // eagle->render(modelShader);
 
-  // goose
-
-  glUniformMatrix4fv(glGetUniformLocation(s->getId(), "matrix"), 1, GL_FALSE, glm::value_ptr(camera.getMvp()));
-
-  model->render(s,
-		ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
-
-
-  // glUniformMatrix4fv(glGetUniformLocation(s->getId(), "matrix"), 1, GL_FALSE, glm::value_ptr(camera.getMvp()));
-
-  eagle->render(s,
-		ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture());
-
-
-  glUseProgram(0);
+  // modelShader.unuse();
   (void)ev;
   (void)time;
 }
@@ -96,6 +86,14 @@ int					main()
       model = ResourceManager::getInstance().get<ObjModelMedia>("goose.obj");
       cat = ResourceManager::getInstance().get<ObjModelMedia>("cat.obj");
       eagle = ResourceManager::getInstance().get<ObjModelMedia>("eagle.obj");
+
+      modelShader.init("deferred.prgm");
+      modelShader.use();
+      modelShader.setUniform("matrix", new UniformMatrix4f(glm::value_ptr(camera.getMvp())));
+      modelShader.setUniform("myTexture", new Uniform1ui(ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture()));
+      modelShader.unuse();
+// ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture()
+
       EventManager::getInstance().play();
     }
   catch (const std::exception &e)

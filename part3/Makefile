@@ -32,6 +32,7 @@ SRCS		=	src/debug/ILogger.cpp \
 			src/uniforms/Uniform1ui.cpp \
 			src/uniforms/Uniform3f.cpp \
 			src/uniforms/UniformMatrix4f.cpp \
+			src/Shader.cpp \
 			main.cpp
 
 
