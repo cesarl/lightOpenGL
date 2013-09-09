@@ -5,7 +5,6 @@
 
 #include				"ImageLoader.hpp"
 #include				"ShaderLoader.hpp"
-#include				"ShaderProgramLoader.hpp"
 #include				"ObjLoader.hpp"
 
 #include				"MediaManager.hpp"
@@ -20,13 +19,6 @@
 #include				"GBufferManager.hpp"
 
 #include				<exception>
-Mesh					goose;
-Mesh					cat;
-Mesh					eagle;
-
-Shader					gooseShader;
-Shader					catShader;
-Shader					eagleShader;
 
 void					update(float time, const ALLEGRO_EVENT &ev)
 {
@@ -57,7 +49,6 @@ int					main()
 
   MediaManager::getInstance().registerLoader(new ImageLoader, ".jpg,.png,.jpeg,.tga,.tif");
   MediaManager::getInstance().registerLoader(new ShaderLoader, ".vert,.pix");
-  MediaManager::getInstance().registerLoader(new ShaderProgramLoader, ".prgm");
   MediaManager::getInstance().registerLoader(new ObjLoader, ".obj");
   MediaManager::getInstance().addSearchPath("./assets/imgs/");
   MediaManager::getInstance().addSearchPath("./assets/shaders/");
@@ -71,26 +62,36 @@ int					main()
   try
     {
 
+      Shader					gooseShader;
+      Shader					catShader;
+      Shader					eagleShader;
+      Mesh					goose;
+      Mesh					cat;
+      Mesh					eagle;
+      UniformMatrix4f				matrix(UniformMatrix4f(glm::value_ptr(camera.getMvp())));
+      Uniform1ui				texture(ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
+
       goose.init("goose.obj");
       cat.init("cat.obj");
       eagle.init("eagle.obj");
 
-      gooseShader.init("deferred.prgm");
+      gooseShader.init("deferred.vert", "deferred.pix");
       gooseShader.use();
-      gooseShader.setUniform("matrix", new UniformMatrix4f(glm::value_ptr(camera.getMvp())));
-      gooseShader.setUniform("myTexture", new Uniform1ui(ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture()));
+      gooseShader.setUniform("matrix", matrix);
+      gooseShader.setUniform("myTexture", texture);
       gooseShader.unuse();
 
-      catShader.init("deferred.prgm");
+
+      catShader.init("deferred.vert", "deferred.pix");
       catShader.use();
-      catShader.setUniform("matrix", new UniformMatrix4f(glm::value_ptr(camera.getMvp())));
-      catShader.setUniform("myTexture", new Uniform1ui(ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture()));
+      // catShader.setUniform("matrix", new UniformMatrix4f(glm::value_ptr(camera.getMvp())));
+      // catShader.setUniform("myTexture", new Uniform1ui(ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture()));
       catShader.unuse();
 
-      eagleShader.init("deferred.prgm");
+      eagleShader.init("deferred.vert", "deferred.pix");
       eagleShader.use();
-      eagleShader.setUniform("matrix", new UniformMatrix4f(glm::value_ptr(camera.getMvp())));
-      eagleShader.setUniform("myTexture", new Uniform1ui(ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture()));
+      // eagleShader.setUniform("matrix", new UniformMatrix4f(glm::value_ptr(camera.getMvp())));
+      // eagleShader.setUniform("myTexture", new Uniform1ui(ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture()));
       eagleShader.unuse();
 
       goose.attachShader(gooseShader);

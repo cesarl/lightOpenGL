@@ -3,10 +3,12 @@
 
 # include "Uniform.hh"
 
-struct Uniform3f : public Uniform
+class Uniform3f : public Uniform
 {
+private:
   float _value[3];
 
+public:
   Uniform3f(float x, float y, float z);
   virtual ~Uniform3f(void);    
   virtual void update(void);

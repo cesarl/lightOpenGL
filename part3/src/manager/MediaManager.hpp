@@ -15,13 +15,11 @@
 #include				"Singleton.hpp"
 #include				"ImageMedia.hpp"
 #include				"ShaderMedia.hpp"
-#include				"ShaderProgramMedia.hpp"
 #include				"ObjModelMedia.hpp"
 
 // todo definir la liste des medias pris en charge
-typedef					TYPELIST_4(ImageMedia,
+typedef					TYPELIST_3(ImageMedia,
 						     ShaderMedia,
-						     ShaderProgramMedia,
 						     ObjModelMedia) MediaList;
 
 template				<class T>

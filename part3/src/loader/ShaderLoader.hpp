@@ -21,14 +21,11 @@ public:
     GLuint				id = 0;
     GLint				compileStatus = GL_TRUE;
 
+    std::cout << "file " << file.getExtension() << std::endl;
     if (file.getExtension() == "vert")
       id = glCreateShader(GL_VERTEX_SHADER);
     else if (file.getExtension() == "pix")
       id = glCreateShader(GL_FRAGMENT_SHADER);
-  if (glGetError() != GL_NO_ERROR)
-    {
-      std::cout << "G" << std::endl;
-    }
 
     if (id == 0 || !glIsShader(id))
       throw LoadingFailed(file.getFullName(), "ShaderLoader failed to create shader.");
@@ -37,22 +34,10 @@ public:
     const char				*sourceChar = source.c_str();
 
     glShaderSource(id, 1, &sourceChar, NULL);
-  if (glGetError() != GL_NO_ERROR)
-    {
-      std::cout << "H" << std::endl;
-    }
 
     glCompileShader(id);
-  if (glGetError() != GL_NO_ERROR)
-    {
-      std::cout << "I" << std::endl;
-    }
 
     glGetShaderiv(id, GL_COMPILE_STATUS, &compileStatus);
-  if (glGetError() != GL_NO_ERROR)
-    {
-      std::cout << "J" << std::endl;
-    }
 
     if (compileStatus != GL_TRUE)
       {
@@ -63,7 +48,11 @@ public:
 	std::cout << std::endl << log;
 	throw LoadingFailed(file.getFullName(), "ShaderLoader failed to compile shader.\n");
       }
-
+    int error;
+    while ((error = glGetError()) != GL_NO_ERROR)
+      {
+	std::cout << "Error " << error << std::endl;
+      }
     return new ShaderMedia(id, file.getFileName(), force);
   }
   virtual void				save(const ShaderMedia *, const std::string &name)

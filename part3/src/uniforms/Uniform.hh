@@ -9,16 +9,15 @@
 
 class Uniform
 {
-protected:
-  Uniform(void);
-
-  GLuint _id;
 public:
+  Uniform(void);
   virtual ~Uniform();
     
   bool init(std::string const &name, GLuint shader);
        
   virtual void update(void) = 0;
+protected:
+  GLuint _id;
 };
 
 #endif /*!UNIFORM_HH_*/

@@ -34,13 +34,13 @@ public:
   void				render()
   {
     std::list<Shader*>::iterator it;
-    glm::mat4			&matrix = camera.getMvp();
+    // glm::mat4			&matrix = camera.getMvp();
 
     it = list_.begin();
     while (it != list_.end())
       {
 	(*it)->use();
-	(*it)->setUniform("matrix", new UniformMatrix4f(glm::value_ptr(matrix)));
+	// (*it)->setUniform("matrix", UniformMatrix4f(glm::value_ptr(matrix)));
 	(*it)->render();
 	(*it)->unuse();
 	++it;
