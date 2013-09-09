@@ -39,8 +39,8 @@ public:
     it = list_.begin();
     while (it != list_.end())
       {
-	(*it)->setUniform("matrix", new UniformMatrix4f(glm::value_ptr(matrix)));
 	(*it)->use();
+	(*it)->setUniform("matrix", new UniformMatrix4f(glm::value_ptr(matrix)));
 	(*it)->render();
 	(*it)->unuse();
 	++it;

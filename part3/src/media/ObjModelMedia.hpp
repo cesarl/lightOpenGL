@@ -40,22 +40,22 @@ public:
     // glDeleteBuffers(1, &uvs_);
   }
 
-  void					render(Shader &s)
+  void					render(GLuint shaderId)
   {
 
     // glActiveTexture(GL_TEXTURE0);
     // glBindTexture(GL_TEXTURE_2D, textureId);
     // glUniform1i(glGetAttribLocation(s.getId(), "myTexture"), /*GL_TEXTURE*/0);
 
-    glEnableVertexAttribArray(glGetAttribLocation(s.getId(), "vertices"));
+    glEnableVertexAttribArray(glGetAttribLocation(shaderId, "vertices"));
     glBindBuffer(GL_ARRAY_BUFFER, vertices_);
-    glVertexAttribPointer(glGetAttribLocation(s.getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(glGetAttribLocation(s.getId(), "texcoord"));
+    glVertexAttribPointer(glGetAttribLocation(shaderId, "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(glGetAttribLocation(shaderId, "texcoord"));
     glBindBuffer(GL_ARRAY_BUFFER, uvs_);
-    glVertexAttribPointer(glGetAttribLocation(s.getId(), "texcoord"), 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(glGetAttribLocation(shaderId, "texcoord"), 2, GL_FLOAT, GL_FALSE, 0, 0);
     glDrawArrays(GL_TRIANGLES, 0, verticesNumber_);
-    glDisableVertexAttribArray(glGetAttribLocation(s.getId(), "vertices"));
-    glDisableVertexAttribArray(glGetAttribLocation(s.getId(), "texcoord"));
+    glDisableVertexAttribArray(glGetAttribLocation(shaderId, "vertices"));
+    glDisableVertexAttribArray(glGetAttribLocation(shaderId, "texcoord"));
 
     // glEnableVertexAttribArray(10);
     // // glBindBuffer(GL_ARRAY_BUFFER, vertices_);
@@ -66,7 +66,7 @@ public:
     // };
     // // glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
 
-    // glVertexAttribPointer(glGetAttribLocation(s.getId(), "vertices"), 3, GL_FLOAT, GL_FALSE, 0, triangle_vertices);
+    // glVertexAttribPointer(glGetAttribLocation(shaderId, "vertices"), 3, GL_FLOAT, GL_FALSE, 0, triangle_vertices);
 
 
     // glDrawArrays(GL_TRIANGLES, 0, 3);

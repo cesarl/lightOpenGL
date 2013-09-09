@@ -1,6 +1,7 @@
-#include				"Shader.hh"
 #include				"ResourceManager.hpp"
+#include				"Shader.hh"
 #include				"ShaderManager.hpp"
+#include				"Mesh.hh"
 
 Shader::Shader()
 {
@@ -60,4 +61,26 @@ void					Shader::use()
 void					Shader::unuse()
 {
   prgm_->unuse();
+}
+
+void					Shader::attach(Mesh *mesh)
+{
+  mesh_.push_back(mesh);
+}
+
+void					Shader::detach(Mesh *mesh)
+{
+  mesh_.remove(mesh);
+}
+
+void					Shader::render()
+{
+  use();
+  for (std::list<Mesh*>::iterator i = mesh_.begin();
+       i != mesh_.end();
+       ++i)
+    {
+      (*i)->render(getId());
+    }
+  unuse();
 }

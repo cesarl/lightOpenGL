@@ -1,6 +1,10 @@
 #ifndef					__SINGLETON_HPP__
 # define				__SINGLETON_HPP__
 
+# ifndef NULL
+#  define NULL 0
+# endif
+
 template				<class T>
 class					Singleton
 {
