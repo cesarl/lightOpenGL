@@ -5,6 +5,7 @@
 #include				<allegro5/allegro_opengl.h>
 #include				<GL/glu.h>
 #include				"Resource.hh"
+#include				"Uniforms.hh"
 #include				"SmartPointer.hpp"
 #include				"SmartPointerPolicies.hpp"
 #include				"Vector3d.hh"
@@ -52,12 +53,12 @@ public:
     return id_;
   }
 
-  void					enable()
+  void					use()
   {
     glUseProgram(id_);
   }
 
-  void					disable()
+  void					unuse()
   {
     glUseProgram(0);
   }
@@ -86,21 +87,20 @@ public:
     return res;
   }
 
-
-  void					setTextures(const std::map<std::string, std::string> & textures)
+  void					setUniform(std::string const &name, Uniform *uniform)
   {
-    textures_ = textures;
-  }
-
-  std::map<std::string, std::string>	&getTextures()
-  {
-    return textures_;
+    if (uniforms_[name])
+      delete uniforms_[name];
+    uniforms_[name] = uniform;
+    uniform->init(name, id_);
+    uniform->update();
   }
 
 private:
   GLuint				id_;
   GLuint				shaders_[2];
   std::map<std::string, std::string> textures_;
+  std::map<std::string, Uniform*>	uniforms_;
 };
 
 typedef					SmartPtr<ShaderProgramMedia, InternalRef> ShaderProgramMediaPtr;

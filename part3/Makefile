@@ -4,7 +4,7 @@ CC		=	g++
 
 RM		=	rm -f
 
-CPPFLAGS	=	-W -Wextra -Wall -Werror -MMD -g -fno-omit-frame-pointer #-O2
+CPPFLAGS	=	-W -Wextra -Wall -Werror -MMD -g -fno-omit-frame-pointer -std=c++0x #-O2
 
 LDFLAGS		=	-L/usr/lib -lallegro -lallegro_dialog -lallegro_primitives -lallegro_ttf -lallegro_font -lallegro_image -lGLU
 
@@ -18,6 +18,7 @@ CPPFLAGS	+=	-I. -I/usr/include/allegro5 \
 			-I./src/system \
 			-I./src/generator \
 			-I./src/media \
+			-I./src/uniforms \
 			-I./src
 
 SRCS		=	src/debug/ILogger.cpp \
@@ -25,7 +26,15 @@ SRCS		=	src/debug/ILogger.cpp \
 			src/manager/Resource.cpp \
 			src/utilities/Vector3d.cpp \
 			../vendors/tiny_obj_loader.cpp \
+			src/uniforms/Uniform.cpp \
+			src/uniforms/Uniform1f.cpp \
+			src/uniforms/Uniform1i.cpp \
+			src/uniforms/Uniform1ui.cpp \
+			src/uniforms/Uniform3f.cpp \
+			src/uniforms/UniformMatrix4f.cpp \
 			main.cpp
+
+
 
 
 OBJS		=	$(SRCS:.cpp=.o)
