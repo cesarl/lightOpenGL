@@ -86,6 +86,7 @@ public:
     glBindBuffer(GL_ARRAY_BUFFER, texcoords);
     glBufferData(GL_ARRAY_BUFFER, resUvs.size() * sizeof(glm::vec2), &resUvs[0], GL_STATIC_DRAW);
 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     return new ObjModelMedia(vertexBuffer, texcoords, resVertices.size(), file.getFileName(), force);
   }
   virtual void				save(const ObjModelMedia *, const std::string &name)

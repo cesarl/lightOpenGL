@@ -17,22 +17,21 @@ public:
     bmp_(bmp),
     tex_(tex)
   {
-    displayList_ = glGenLists(1);
-    glNewList(displayList_, GL_COMPILE);
-    glBindTexture(GL_TEXTURE_2D, tex_);
-
-    glBegin(GL_QUADS);
-
-    glTexCoord2f(0.0, 0.0); // Top left hand corner
-    glVertex3f(0.0, 0.0, 0.0); // X,Y,Z
-    glTexCoord2f(1.0, 0.0); // Bottom left hand corner
-    glVertex3f(1.0, 0.0, 0.0); // X,Y,Z
-    glTexCoord2f(1.0, 1.0); // Bottom right hand corner
-    glVertex3f(1.0, 1.0, 0.0); // X,Y,Z
-    glTexCoord2f(0.0, 1.0); // Top right hand corner
-    glVertex3f(0, 1.0, 0.0); // X,Y,Z
-    glEnd();
-    glEndList();
+    // displayList_ = glGenLists(1);
+    // glNewList(displayList_, GL_COMPILE);
+    // glBegin(GL_QUADS);
+    // glBindTexture(GL_TEXTURE_2D, tex_);
+    // glTexCoord2f(0.0, 0.0); // Top left hand corner
+    // glVertex3f(0.0, 0.0, 0.0); // X,Y,Z
+    // glTexCoord2f(1.0, 0.0); // Bottom left hand corner
+    // glVertex3f(1.0, 0.0, 0.0); // X,Y,Z
+    // glTexCoord2f(1.0, 1.0); // Bottom right hand corner
+    // glVertex3f(1.0, 1.0, 0.0); // X,Y,Z
+    // glTexCoord2f(0.0, 1.0); // Top right hand corner
+    // glVertex3f(0, 1.0, 0.0); // X,Y,Z
+    // glBindTexture(GL_TEXTURE_2D, 0);
+    // glEnd();
+    // glEndList();
   };
 
   virtual void				operator=(ImageMedia & o)

@@ -42,11 +42,6 @@ public:
 
   void					render(GLuint shaderId)
   {
-
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindTexture(GL_TEXTURE_2D, textureId);
-    // glUniform1i(glGetAttribLocation(s.getId(), "myTexture"), /*GL_TEXTURE*/0);
-
     glEnableVertexAttribArray(glGetAttribLocation(shaderId, "vertices"));
     glBindBuffer(GL_ARRAY_BUFFER, vertices_);
     glVertexAttribPointer(glGetAttribLocation(shaderId, "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -56,22 +51,6 @@ public:
     glDrawArrays(GL_TRIANGLES, 0, verticesNumber_);
     glDisableVertexAttribArray(glGetAttribLocation(shaderId, "vertices"));
     glDisableVertexAttribArray(glGetAttribLocation(shaderId, "texcoord"));
-
-    // glEnableVertexAttribArray(10);
-    // // glBindBuffer(GL_ARRAY_BUFFER, vertices_);
-    // GLfloat triangle_vertices[] = {
-    //   -10.0,  10, 0,
-    //   -10, -10, 0,
-    //   10, -10, 0
-    // };
-    // // glVertexAttribPointer(10, 3, GL_FLOAT, GL_FALSE, 0, (void*)(0));
-
-    // glVertexAttribPointer(glGetAttribLocation(shaderId, "vertices"), 3, GL_FLOAT, GL_FALSE, 0, triangle_vertices);
-
-
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
-    // // glBindBuffer(GL_ARRAY_BUFFER, 0);
-    // glDisableVertexAttribArray(10);
   }
 
   unsigned int				getVerticesNumber() const

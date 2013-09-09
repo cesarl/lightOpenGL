@@ -28,7 +28,7 @@ public:
     al_set_new_display_flags(ALLEGRO_OPENGL_3_0);
     if (!al_create_display(width, height))
       return false;
-    glEnable(GL_TEXTURE_2D);
+    // glEnable(GL_TEXTURE_2D);
     // glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     

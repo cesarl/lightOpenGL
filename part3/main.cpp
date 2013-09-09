@@ -16,7 +16,7 @@
 #include				"Light.hpp"
 #include				"Shader.hh"
 #include				"Mesh.hh"
-#include				"GBufferManager.hpp"
+// #include				"GBufferManager.hpp"
 
 #include				<exception>
 
@@ -59,44 +59,42 @@ int					main()
 
   // GBufferManager::getInstance().init(1344, 704);
 
-  try
-    {
-
       Shader					gooseShader;
       Shader					catShader;
       Shader					eagleShader;
       Mesh					goose;
       Mesh					cat;
       Mesh					eagle;
-      UniformMatrix4f				matrix(UniformMatrix4f(glm::value_ptr(camera.getMvp())));
-      Uniform1ui				texture(ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
 
-      goose.init("goose.obj");
-      cat.init("cat.obj");
-      eagle.init("eagle.obj");
+      {
+	goose.init("goose.obj");
+	cat.init("cat.obj");
+	eagle.init("eagle.obj");
 
-      gooseShader.init("deferred.vert", "deferred.pix");
-      gooseShader.use();
-      gooseShader.setUniform("matrix", matrix);
-      gooseShader.setUniform("myTexture", texture);
-      gooseShader.unuse();
+	gooseShader.init("deferred.vert", "deferred.pix");
+	gooseShader.setTexture("myTexture",
+			       1,
+			       ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
 
 
-      catShader.init("deferred.vert", "deferred.pix");
-      catShader.use();
-      // catShader.setUniform("matrix", new UniformMatrix4f(glm::value_ptr(camera.getMvp())));
-      // catShader.setUniform("myTexture", new Uniform1ui(ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture()));
-      catShader.unuse();
+	catShader.init("deferred.vert", "deferred.pix");
+	catShader.setTexture("myTexture",
+			       0,
+			       ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
 
-      eagleShader.init("deferred.vert", "deferred.pix");
-      eagleShader.use();
-      // eagleShader.setUniform("matrix", new UniformMatrix4f(glm::value_ptr(camera.getMvp())));
-      // eagleShader.setUniform("myTexture", new Uniform1ui(ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture()));
-      eagleShader.unuse();
+	eagleShader.init("deferred.vert", "deferred.pix");
+	eagleShader.setTexture("myTexture",
+			       2,
+			       ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture());
 
-      goose.attachShader(gooseShader);
-      cat.attachShader(catShader);
-      eagle.attachShader(eagleShader);
+	goose.attachShader(gooseShader);
+	cat.attachShader(catShader);
+	eagle.attachShader(eagleShader);
+      }
+
+  try
+    {
+
 // ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture()
 
       EventManager::getInstance().play();

@@ -18,7 +18,7 @@ Shader::~Shader()
 void					Shader::init(const std::string &vertex,
 						     const std::string &fragment)
 {
-  // GLint					linkStatus = GL_TRUE;
+  GLint					linkStatus = GL_TRUE;
   ShaderMediaPtr			shader1;
   ShaderMediaPtr			shader2;
 
@@ -43,15 +43,15 @@ void					Shader::init(const std::string &vertex,
 
   glLinkProgram(id_);
 
-  // if (linkStatus != GL_TRUE)
-  //   {
-  //     GLint				l;
-  //     glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &l);
-  //     std::string log(l + 1, '\0');
-  //     glGetProgramInfoLog(id_, l, &l, &log[0]);
-  //     std::cout << std::endl << log;
-  //     throw LoadingFailed(vertex + " " + fragment, "ShaderProgramLoader failed to link program.\n");
-  //   }
+  if (linkStatus != GL_TRUE)
+    {
+      GLint				l;
+      glGetProgramiv(id_, GL_INFO_LOG_LENGTH, &l);
+      std::string log(l + 1, '\0');
+      glGetProgramInfoLog(id_, l, &l, &log[0]);
+      std::cout << std::endl << log;
+      throw LoadingFailed(vertex + " " + fragment, "ShaderProgramLoader failed to link program.\n");
+    }
 }
 
 void					Shader::operator=(Shader & o)
@@ -70,6 +70,11 @@ void					Shader::setUniform(std::string const &name, Uniform &uniform)
 {
   uniform.init(name, getId());
   uniform.update();
+}
+
+void					Shader::setTexture(std::string const &name, GLuint index, GLuint texture)
+{
+  textures_.push_back(s_texture(texture, index, name));
 }
 
 void					Shader::use()
@@ -94,14 +99,21 @@ void					Shader::detach(Mesh *mesh)
 
 void					Shader::render()
 {
-  use();
+  for (std::list<s_texture>::iterator i = textures_.begin();
+       i != textures_.end();
+       ++i)
+    {
+      glActiveTexture(GL_TEXTURE0 + i->index);
+      glBindTexture(GL_TEXTURE_2D, i->texture);
+      glUniform1i(getUniformId(i->name), i->index);
+    }
+
   for (std::list<Mesh*>::iterator i = mesh_.begin();
        i != mesh_.end();
        ++i)
     {
       (*i)->render(getId());
     }
-  unuse();
 }
 
 int					Shader::getUniformId(const std::string &name)
