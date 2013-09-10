@@ -1,3 +1,3 @@
 #### Part 3
 
-Deferred shading
+Phong lightning
