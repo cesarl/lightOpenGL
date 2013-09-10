@@ -94,7 +94,14 @@ void					Shader::attach(Mesh *mesh)
 
 void					Shader::detach(Mesh *mesh)
 {
-  mesh_.remove(mesh);
+  /////////////////////////////////////////////////////////
+  // IMPORTANT !!!					 //
+  // TEMPORARY FIX					 //
+  // NEED TO REPLACE POINTER BY SMART POINTER		 //
+  // ACTUALLY, THIS IS NOT A FIX BUT A COMMENTED FEATURE //
+  /////////////////////////////////////////////////////////
+  // mesh_.remove(mesh);
+  (void)mesh;
 }
 
 void					Shader::render()
