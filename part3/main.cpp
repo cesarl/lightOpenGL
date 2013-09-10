@@ -71,18 +71,18 @@ int					main()
 	cat.init("cat.obj");
 	eagle.init("eagle.obj");
 
-	gooseShader.init("deferred.vert", "deferred.pix");
+	gooseShader.init("phong.vert", "phong.pix");
 	gooseShader.setTexture("myTexture",
 			       1,
 			       ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
 
 
-	catShader.init("deferred.vert", "deferred.pix");
+	catShader.init("phong.vert", "phong.pix");
 	catShader.setTexture("myTexture",
 			       0,
 			       ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
 
-	eagleShader.init("deferred.vert", "deferred.pix");
+	eagleShader.init("phong.vert", "phong.pix");
 	eagleShader.setTexture("myTexture",
 			       2,
 			       ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture());

@@ -17,12 +17,13 @@ class					ObjModelMedia : public Resource
 public:
   ObjModelMedia(GLuint vertices,
 		GLuint uvs,
+		GLuint normals,
 		unsigned int verticesNumber,
 		std::string const & name, bool force) :
     Resource(name, force),
     vertices_(vertices),
     uvs_(uvs),
-    normals_(0),
+    normals_(normals),
     verticesNumber_(verticesNumber)
   {
   }
@@ -37,7 +38,8 @@ public:
   virtual ~ObjModelMedia()
   {
     glDeleteBuffers(1, &vertices_);
-    // glDeleteBuffers(1, &uvs_);
+    glDeleteBuffers(1, &uvs_);
+    glDeleteBuffers(1, &normals_);
   }
 
   void					render(GLuint shaderId)
@@ -45,12 +47,19 @@ public:
     glEnableVertexAttribArray(glGetAttribLocation(shaderId, "vertices"));
     glBindBuffer(GL_ARRAY_BUFFER, vertices_);
     glVertexAttribPointer(glGetAttribLocation(shaderId, "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+
     glEnableVertexAttribArray(glGetAttribLocation(shaderId, "texcoord"));
     glBindBuffer(GL_ARRAY_BUFFER, uvs_);
     glVertexAttribPointer(glGetAttribLocation(shaderId, "texcoord"), 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glEnableVertexAttribArray(glGetAttribLocation(shaderId, "normals"));
+    glBindBuffer(GL_ARRAY_BUFFER, normals_);
+    glVertexAttribPointer(glGetAttribLocation(shaderId, "normals"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+
     glDrawArrays(GL_TRIANGLES, 0, verticesNumber_);
     glDisableVertexAttribArray(glGetAttribLocation(shaderId, "vertices"));
     glDisableVertexAttribArray(glGetAttribLocation(shaderId, "texcoord"));
+    glDisableVertexAttribArray(glGetAttribLocation(shaderId, "normals"));
   }
 
   unsigned int				getVerticesNumber() const

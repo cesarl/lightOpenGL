@@ -1,6 +1,8 @@
 uniform mat4 matrix;
 attribute vec3 vertices;
 attribute vec2 texcoord;
+attribute vec3 normals;
+
 varying vec2 uvs;
 
 

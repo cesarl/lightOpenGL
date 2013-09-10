@@ -57,11 +57,6 @@ public:
 	      resUvs.push_back(glm::vec2(shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 0],
 					 shapes[i].mesh.texcoords[shapes[i].mesh.indices[v] * 2 + 1]));
 	  }
-	// std::map<std::string, std::string>::iterator it(shapes[i].material.unknown_parameter.begin());
-	// std::map<std::string, std::string>::iterator itEnd(shapes[i].material.unknown_parameter.end());
-	// for (; it != itEnd; it++) {
-	//   printf("  material.%s = %s\n", it->first.c_str(), it->second.c_str());
-	// }
 	printf("\n");
       }
 
@@ -86,8 +81,18 @@ public:
     glBindBuffer(GL_ARRAY_BUFFER, texcoords);
     glBufferData(GL_ARRAY_BUFFER, resUvs.size() * sizeof(glm::vec2), &resUvs[0], GL_STATIC_DRAW);
 
+    GLuint				normalBuffer;
+
+    glGenBuffers(1, &normalBuffer);
+    if (normalBuffer <= 0)
+      {
+	std::cout << "Normal buffer error" << std::endl;
+      }
+    glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+    glBufferData(GL_ARRAY_BUFFER, resNormals.size() * sizeof(glm::vec3), &resNormals[0], GL_STATIC_DRAW);
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    return new ObjModelMedia(vertexBuffer, texcoords, resVertices.size(), file.getFileName(), force);
+    return new ObjModelMedia(vertexBuffer, texcoords, normalBuffer, resVertices.size(), file.getFileName(), force);
   }
   virtual void				save(const ObjModelMedia *, const std::string &name)
   {
