@@ -2,10 +2,11 @@
 # define				__MESH_HH__
 
 #include				"ObjModelMedia.hpp"
+#include				"AObject.hpp"
 
 class					Shader;
 
-class					Mesh
+class					Mesh : public AObject
 {
 private:
   ObjModelMediaPtr			model_;

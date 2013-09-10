@@ -112,6 +112,9 @@ void					Shader::render()
        i != mesh_.end();
        ++i)
     {
+      UniformMatrix4f		modelMatrix(glm::value_ptr((*i)->getTransform()));
+
+      setUniform("modelMatrix", modelMatrix);
       (*i)->render(getId());
     }
 }

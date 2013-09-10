@@ -19,7 +19,7 @@ private:
   float					verticalAngle_;
   float					fov_;
   float					speed_;
-  glm::mat4				mvp_;
+  glm::mat4				vp_;
   std::bitset<4>			keys_;
 public:
   Camera()
@@ -93,13 +93,13 @@ public:
 
     projection_ = glm::perspective(fov_, 4.0f / 3.0f, 0.1f, 100.0f);
     view_ = glm::lookAt(position_, position_ + direction, -up);
-    mvp_ = projection_ * view_;
+    vp_ = projection_ * view_;
     last = pos;
   }
 
-  glm::mat4				&getMvp()
+  glm::mat4				&getVp()
   {
-    return mvp_;
+    return vp_;
   }
 
   

@@ -34,7 +34,7 @@ public:
   void				render()
   {
     std::list<Shader*>::iterator it;
-    UniformMatrix4f		matrix(glm::value_ptr(camera.getMvp()));
+    UniformMatrix4f		matrix(glm::value_ptr(camera.getVp()));
 
     it = list_.begin();
     while (it != list_.end())

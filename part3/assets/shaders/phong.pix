@@ -5,6 +5,7 @@ in vec3 cameraPosition;
 in vec3 cameraNormal;
 in mat4 viewMatrix;
 
+
 /*********/
 /* LIGHT */
 /*********/
@@ -17,7 +18,7 @@ vec3 La = vec3 (0.2, 0.2, 0.2); // grey ambient colour
 /* SURFACE PROPERTIES */
 /**********************/
 vec3 Ks = vec3 (1.0, 1.0, 1.0); // fully reflect specular light
-vec3 Kd = texture(myTexture, uvs).rgb; // orange diffuse surface reflectance
+vec3 Kd = texture(myTexture, uvs).rgb; // texture diffuse surface reflectance
 vec3 Ka = texture(myTexture, uvs).rgb; // fully reflect ambient light
 float specular_exponent = 10000.0; // specular 'power'
 

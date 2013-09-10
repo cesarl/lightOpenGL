@@ -20,6 +20,10 @@
 
 #include				<exception>
 
+
+Mesh					goose;
+Mesh					cat;
+
 void					update(float time, const ALLEGRO_EVENT &ev)
 {
   camera.update(time, ev);
@@ -61,15 +65,10 @@ int					main()
 
       Shader					gooseShader;
       Shader					catShader;
-      Shader					eagleShader;
-      Mesh					goose;
-      Mesh					cat;
-      Mesh					eagle;
 
       {
 	goose.init("goose.obj");
 	cat.init("cat.obj");
-	eagle.init("eagle.obj");
 
 	gooseShader.init("phong.vert", "phong.pix");
 	gooseShader.setTexture("myTexture",
@@ -82,14 +81,10 @@ int					main()
 			       0,
 			       ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
 
-	eagleShader.init("phong.vert", "phong.pix");
-	eagleShader.setTexture("myTexture",
-			       2,
-			       ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture());
-
 	goose.attachShader(gooseShader);
 	cat.attachShader(catShader);
-	eagle.attachShader(eagleShader);
+
+	goose.getTransform() = glm::translate(goose.getTransform(), glm::vec3(1, 0, 0));
       }
 
   try

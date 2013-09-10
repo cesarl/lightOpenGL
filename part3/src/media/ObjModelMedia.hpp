@@ -5,6 +5,7 @@
 #include				<allegro5/allegro_opengl.h>
 #include				<GL/glu.h>
 #include				<glm/glm.hpp>
+#include				<glm/gtc/type_ptr.hpp>
 #include				"ResourceManager.hpp"
 #include				"Resource.hh"
 #include				"SmartPointer.hpp"
