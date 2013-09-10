@@ -6,6 +6,7 @@
 #include			"Singleton.hpp"
 #include			"Shader.hh"
 #include			"Camera.hpp"
+#include			"GBufferManager.hpp"
 
 // pour donner l acces a la camera
 // crado, provisoire
@@ -39,9 +40,11 @@ public:
     it = list_.begin();
     while (it != list_.end())
       {
+	GBufferManager::getInstance().bindForWriting();
 	(*it)->use();
 	(*it)->setUniform("matrix", matrix);
 	(*it)->render();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	(*it)->unuse();
 	++it;
       }

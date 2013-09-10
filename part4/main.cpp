@@ -13,7 +13,7 @@
 #include				"Light.hpp"
 #include				"Shader.hh"
 #include				"Mesh.hh"
-// #include				"GBufferManager.hpp"
+#include				"GBufferManager.hpp"
 
 #include				<exception>
 
@@ -29,7 +29,32 @@ void					update(float time, const ALLEGRO_EVENT &ev)
 
 void					draw(float time, const ALLEGRO_EVENT &ev)
 {
+  // I clear GBuffer before drawwing on int
+  GBufferManager::getInstance().bindForWriting();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
   ShaderManager::getInstance().render();
+
+  GBufferManager::getInstance().bindForReading();
+
+  GLint HalfWidth = (GLint)(1334 / 2.0f);
+  GLint HalfHeight = (GLint)(704 / 2.0f);
+  GLint w = 1334;
+  GLint h = 704;
+        
+  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_POSITION);
+  glBlitFramebuffer(0, 0, 1334, 704, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_DIFFUSE);
+  glBlitFramebuffer(0, 0, 1334, 704, 0, HalfHeight, HalfWidth, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_NORMAL);
+  glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, HalfHeight, w, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
+  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_TEXCOORD);
+  glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, 0, w, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+
   (void)ev;
   (void)time;
 }
@@ -59,7 +84,7 @@ int					main()
   EventManager::getInstance().setDrawLoop(draw);
   EventManager::getInstance().setUpdateLoop(update);
 
-  // GBufferManager::getInstance().init(1344, 704);
+  GBufferManager::getInstance().init(1344, 704);
 
       Shader					gooseShader;
       Shader					catShader;
@@ -70,27 +95,20 @@ int					main()
 	cat.init("cat.obj");
 	barrel.init("barrel.obj");
 
-	gooseShader.init("phong.vert", "phong.pix");
+	gooseShader.init("deferred.vert", "deferred.pix");
 	gooseShader.setTexture("myTexture",
 			       1,
 			       ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
 
-
-	catShader.init("bump.vert", "bump.pix");
+	catShader.init("deferred.vert", "deferred.pix");
 	catShader.setTexture("myTexture",
 			       0,
 			       ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
-	catShader.setTexture("normalTexture",
-			       1,
-			       ResourceManager::getInstance().get<ImageMedia>("cat_norm.tga")->getTexture());
 
-	barrelShader.init("bump.vert", "bump.pix");
+	barrelShader.init("deferred.vert", "deferred.pix");
 	barrelShader.setTexture("myTexture",
 			       0,
 			       ResourceManager::getInstance().get<ImageMedia>("barrel.jpg")->getTexture());
-	barrelShader.setTexture("normalTexture",
-			       1,
-			       ResourceManager::getInstance().get<ImageMedia>("barrelNormal.jpg")->getTexture());
 
 	goose.attachShader(gooseShader);
 	cat.attachShader(catShader);
@@ -104,9 +122,6 @@ int					main()
 
   try
     {
-
-// ResourceManager::getInstance().get<ImageMedia>("eagle.jpg")->getTexture()
-
       EventManager::getInstance().play();
     }
   catch (const std::exception &e)
@@ -114,6 +129,6 @@ int					main()
       ILogger::log(e.what());
     }
   EventManager::getInstance().uninit();
-  // GBufferManager::getInstance().uninit();
+  GBufferManager::getInstance().uninit();
   return 0;
 }
