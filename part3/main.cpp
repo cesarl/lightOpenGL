@@ -76,15 +76,21 @@ int					main()
 			       ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
 
 
-	catShader.init("phong.vert", "phong.pix");
+	catShader.init("bump.vert", "bump.pix");
 	catShader.setTexture("myTexture",
 			       0,
 			       ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
+	catShader.setTexture("normalTexture",
+			       1,
+			       ResourceManager::getInstance().get<ImageMedia>("cat_norm.tga")->getTexture());
 
-	barrelShader.init("phong.vert", "phong.pix");
+	barrelShader.init("bump.vert", "bump.pix");
 	barrelShader.setTexture("myTexture",
 			       0,
 			       ResourceManager::getInstance().get<ImageMedia>("barrel.jpg")->getTexture());
+	barrelShader.setTexture("normalTexture",
+			       1,
+			       ResourceManager::getInstance().get<ImageMedia>("barrelNormal.jpg")->getTexture());
 
 	goose.attachShader(gooseShader);
 	cat.attachShader(catShader);
