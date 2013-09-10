@@ -1,6 +1,3 @@
-#include				<glm/glm.hpp>
-#include				<glm/gtc/matrix_transform.hpp>
-
 #include				"Logger.hpp"
 
 #include				"ImageLoader.hpp"
@@ -23,6 +20,7 @@
 
 Mesh					goose;
 Mesh					cat;
+Mesh					barrel;
 
 void					update(float time, const ALLEGRO_EVENT &ev)
 {
@@ -65,10 +63,12 @@ int					main()
 
       Shader					gooseShader;
       Shader					catShader;
+      Shader					barrelShader;
 
       {
 	goose.init("goose.obj");
 	cat.init("cat.obj");
+	barrel.init("barrel.obj");
 
 	gooseShader.init("phong.vert", "phong.pix");
 	gooseShader.setTexture("myTexture",
@@ -81,10 +81,19 @@ int					main()
 			       0,
 			       ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
 
+	barrelShader.init("phong.vert", "phong.pix");
+	barrelShader.setTexture("myTexture",
+			       0,
+			       ResourceManager::getInstance().get<ImageMedia>("barrel.jpg")->getTexture());
+
 	goose.attachShader(gooseShader);
 	cat.attachShader(catShader);
+	barrel.attachShader(barrelShader);
 
-	goose.getTransform() = glm::translate(goose.getTransform(), glm::vec3(1, 0, 0));
+	goose.getTransform() = glm::translate(goose.getTransform(), glm::vec3(1, 0, 0));	
+	cat.getTransform() = glm::translate(cat.getTransform(), glm::vec3(-1, 0, 0));	
+	barrel.getTransform() = glm::translate(barrel.getTransform(), glm::vec3(0, 0, 1));
+	barrel.getTransform() = glm::scale(0.4, 0.4, 0.4);
       }
 
   try

@@ -13,7 +13,7 @@ private:
   Shader				*shader_;
 public:
   Mesh();
-  ~Mesh();
+  virtual ~Mesh();
   void					init(const std::string &fileName);
   void					operator=(Mesh & o);
   void					attachShader(Shader &shader);
