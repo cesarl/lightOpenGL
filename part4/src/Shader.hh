@@ -2,6 +2,7 @@
 # define				__SHADER_HPP__
 
 #include				<list>
+#include				<map>
 #include				"Uniforms.hh"
 #include				"ShaderMedia.hpp"
 
@@ -27,6 +28,7 @@ private:
   GLuint				id_;
   ShaderMediaPtr			shaders_[2];
   std::list<s_texture>			textures_;
+  std::map<std::string, Uniform*>	uniforms_;
 public:
   Shader(unsigned int pass = 0);
   ~Shader();
@@ -35,6 +37,7 @@ public:
   void					operator=(Shader & o);
   GLuint				getId() const;
   void					setUniform(std::string const &name, Uniform &uniform);
+  void					addUniform(std::string const &name, Uniform &uniform);
   void					setTexture(std::string const &name, GLuint index, GLuint texture);
   void					use();
   void					unuse();

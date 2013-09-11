@@ -108,7 +108,9 @@ int					main()
 			  0,
 			  ResourceManager::getInstance().get<ImageMedia>("barrel.jpg")->getTexture());
 
-  lightPointShader.init("deferred.vert", "deferred.pix");
+  Uniform3f		color(1,0,1);
+  lightPointShader.init("light.vert", "light.pix");
+  lightPointShader.addUniform("color", color);
 
   goose.attachShader(gooseShader);
   cat.attachShader(catShader);

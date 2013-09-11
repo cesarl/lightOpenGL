@@ -74,6 +74,12 @@ void					Shader::setUniform(std::string const &name, Uniform &uniform)
   uniform.update();
 }
 
+void					Shader::addUniform(std::string const &name, Uniform &uniform)
+{
+  uniform.init(name, getId());
+  uniforms_[name] = &uniform;
+}
+
 void					Shader::setTexture(std::string const &name, GLuint index, GLuint texture)
 {
   textures_.push_back(s_texture(texture, index, name));
@@ -82,6 +88,14 @@ void					Shader::setTexture(std::string const &name, GLuint index, GLuint textur
 void					Shader::use()
 {
   glUseProgram(id_);
+  std::map<std::string, Uniform*>::iterator it;
+
+  it = uniforms_.begin();
+  while (it != uniforms_.end())
+    {
+      it->second->update();
+      ++it;
+    }
 }
 
 void					Shader::unuse()
