@@ -3,9 +3,10 @@
 #include				"ShaderManager.hpp"
 #include				"Mesh.hh"
 
-Shader::Shader()
+Shader::Shader(unsigned int pass) :
+  pass_(pass)
 {
-  ShaderManager::getInstance().addShader(this);
+  ShaderManager::getInstance().addShader(this, pass);
 }
 
 Shader::~Shader()
@@ -59,6 +60,7 @@ void					Shader::operator=(Shader & o)
   id_ = o.id_;
   shaders_[0] = o.shaders_[0];
   shaders_[1] = o.shaders_[1];
+  pass_ = o.pass_;
 }
 
 GLuint					Shader::getId() const
@@ -148,4 +150,9 @@ int					Shader::getAttribId(const std::string &name)
       throw AttribLocationUnknown(name, gluErrorString(glGetError()));
     }
   return res;
+}
+
+unsigned int				Shader::getPass() const
+{
+  return pass_;
 }

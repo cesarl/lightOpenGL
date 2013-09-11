@@ -1,13 +1,12 @@
 #ifndef				__SHADER_NANAGER_HPP__
 # define			__SHADER_NANAGER_HPP__
 
-#include			<list>
+#include			<map>
 #include			<algorithm>
 #include			"Singleton.hpp"
 #include			"Shader.hh"
 #include			"LightPoint.hpp"
 #include			"Camera.hpp"
-#include			"GBufferManager.hpp"
 
 // pour donner l acces a la camera
 // crado, provisoire
@@ -16,37 +15,26 @@
 class				ShaderManager : public Singleton<ShaderManager>
 {
 private:
-  std::list<Shader*>		shaders_;
-  std::list<LightPoint*>	lightPoints_;
+  std::multimap<unsigned int, Shader*>	shaders_;
 public:
   friend class Singleton<ShaderManager>;
 
   virtual ~ShaderManager()
   {}
 
-  void				addShader(Shader *shader)
+  void				addShader(Shader *shader, unsigned int pass)
   {
-    shaders_.push_back(shader);
+    shaders_.insert(std::pair<unsigned int, Shader*>(pass, shader));
   }
 
   void				removeShader(Shader *shader)
   {
-    shaders_.remove(shader);
-  }
-
-  void				addLightPoint(LightPoint *lightPoint)
-  {
-    lightPoints_.push_back(lightPoint);
-  }
-
-  void				removeLightPoint(LightPoint *lightPoint)
-  {
-    lightPoints_.remove(lightPoint);
+    shaders_.erase(shader->getPass());
   }
 
   void				render()
   {
-    std::list<Shader*>::iterator it;
+    std::multimap<unsigned int, Shader*>::iterator it;
     UniformMatrix4f		matrix(glm::value_ptr(camera.getVp()));
 
     // I clear GBuffer before drawing on it
@@ -57,12 +45,10 @@ public:
     it = shaders_.begin();
     while (it != shaders_.end())
       {
-	GBufferManager::getInstance().bindForWriting();
-	(*it)->use();
-	(*it)->setUniform("matrix", matrix);
-	(*it)->render();
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	(*it)->unuse();
+	it->second->use();
+	it->second->setUniform("matrix", matrix);
+	it->second->render();
+	it->second->unuse();
 	++it;
       }
   }

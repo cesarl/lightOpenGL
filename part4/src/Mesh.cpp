@@ -33,5 +33,8 @@ void					Mesh::attachShader(Shader &shader)
 
 void					Mesh::render(GLuint shaderId)
 {
+
+  GBufferManager::getInstance().bindForWriting();
   model_->render(shaderId);
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

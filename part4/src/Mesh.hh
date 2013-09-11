@@ -3,21 +3,22 @@
 
 #include				"ObjModelMedia.hpp"
 #include				"AObject.hpp"
+#include				"GBufferManager.hpp"
 
 class					Shader;
 
 class					Mesh : public AObject
 {
-private:
+protected:
   ObjModelMediaPtr			model_;
   Shader				*shader_;
 public:
   Mesh();
   virtual ~Mesh();
-  void					init(const std::string &fileName);
-  void					operator=(Mesh & o);
+  virtual void				init(const std::string &fileName);
+  virtual void				operator=(Mesh & o);
   void					attachShader(Shader &shader);
-  void					render(GLuint shaderId);
+  virtual void				render(GLuint shaderId);
 };
 
 #endif					// __MESH_HH__

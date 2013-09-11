@@ -36,8 +36,8 @@ public:
 
     if (!err.empty())
       {
-    throw LoadingFailed(file.getFullName(), err);
-    }
+	throw LoadingFailed(file.getFullName(), err);
+      }
 
     std::cout << "# of shapes : " << shapes.size() << std::endl;
 
@@ -61,35 +61,44 @@ public:
       }
 
 
-    GLuint				vertexBuffer;
+    GLuint				vertexBuffer = 0;
 
-    glGenBuffers(1, &vertexBuffer);
-    if (vertexBuffer <= 0)
+    if (shapes[0].mesh.positions.size() > 0)
       {
-	std::cout << "Vertex buffer error" << std::endl;
+	glGenBuffers(1, &vertexBuffer);
+	if (vertexBuffer <= 0)
+	  {
+	    std::cout << "Vertex buffer error" << std::endl;
+	  }
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, resVertices.size() * sizeof(glm::vec3), &resVertices[0], GL_STATIC_DRAW);
       }
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, resVertices.size() * sizeof(glm::vec3), &resVertices[0], GL_STATIC_DRAW);
 
-    GLuint				texcoords;
+    GLuint				texcoords = 0;
 
-    glGenBuffers(1, &texcoords);
-    if (vertexBuffer <= 0)
+    if (shapes[0].mesh.texcoords.size() > 0)
       {
-	std::cout << "TexCoords buffer error" << std::endl;
+	glGenBuffers(1, &texcoords);
+	if (vertexBuffer <= 0)
+	  {
+	    std::cout << "TexCoords buffer error" << std::endl;
+	  }
+	glBindBuffer(GL_ARRAY_BUFFER, texcoords);
+	glBufferData(GL_ARRAY_BUFFER, resUvs.size() * sizeof(glm::vec2), &resUvs[0], GL_STATIC_DRAW);
       }
-    glBindBuffer(GL_ARRAY_BUFFER, texcoords);
-    glBufferData(GL_ARRAY_BUFFER, resUvs.size() * sizeof(glm::vec2), &resUvs[0], GL_STATIC_DRAW);
 
-    GLuint				normalBuffer;
+    GLuint				normalBuffer = 0;
 
-    glGenBuffers(1, &normalBuffer);
-    if (normalBuffer <= 0)
+    if (shapes[0].mesh.normals.size() > 0)
       {
-	std::cout << "Normal buffer error" << std::endl;
+	glGenBuffers(1, &normalBuffer);
+	if (normalBuffer <= 0)
+	  {
+	    std::cout << "Normal buffer error" << std::endl;
+	  }
+	glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
+	glBufferData(GL_ARRAY_BUFFER, resNormals.size() * sizeof(glm::vec3), &resNormals[0], GL_STATIC_DRAW);
       }
-    glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
-    glBufferData(GL_ARRAY_BUFFER, resNormals.size() * sizeof(glm::vec3), &resNormals[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     return new ObjModelMedia(vertexBuffer, texcoords, normalBuffer, resVertices.size(), file.getFileName(), force);

@@ -1,34 +1,43 @@
 #ifndef					__LIGHT_POINT_HPP__
 # define				__LIGHT_POINT_HPP__
 
-#include				"AObject.hpp"
-#include				"ObjModelMedia.hpp"
-// #include				"Shader.hpp"
+#include				"Mesh.hh"
 
-class					LightPoint : public AObject
+class					LightPoint : public Mesh
 {
 private:
-  // Shader				shader_;
-  ObjModelMediaPtr			model_;
   glm::vec3				color_;
 public:
-  LightPoint()
+  LightPoint() : Mesh()
   {}
+
   virtual ~LightPoint()
   {}
-  void					init()
+
+  void					init(const std::string &fileName = "sphere.obj")
   {
-    model_ = ResourceManager::getInstance().get<ObjModelMedia>("sphere.obj");
+    model_ = ResourceManager::getInstance().get<ObjModelMedia>(fileName);
   }
+
   void					setColor(const glm::vec3 & color)
   {
     color_ = color;
   }
-  void					operator=(LightPoint & o)
+
+  virtual void				operator=(LightPoint & o)
   {
-    // shader = o.shader_;
-    model_ = o.model_;
+    color_ = o.color_;
+    Mesh::operator=(o);
   }
+
+  // virtual void				render(GLuint shaderId)
+  // {
+  //   GBufferManager::getInstance().bindForWriting();
+  //   model_->render(shaderId);
+  //   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  // }
+
+
 };
 
 #endif					// __MESH_HPP__

@@ -22,12 +22,13 @@ private:
     {}
   };
 
+  unsigned int				pass_;
   std::list<Mesh*>			mesh_;
   GLuint				id_;
   ShaderMediaPtr			shaders_[2];
   std::list<s_texture>			textures_;
 public:
-  Shader();
+  Shader(unsigned int pass = 0);
   ~Shader();
   void					init(const std::string &vertex = "",
 						     const std::string &fragment = "");
@@ -42,6 +43,7 @@ public:
   void					render();
   int					getUniformId(const std::string &name);
   int					getAttribId(const std::string &name);
+  unsigned int				getPass() const;
 };
 
 #endif					// __SHADER_HPP__

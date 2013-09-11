@@ -45,17 +45,26 @@ public:
 
   void					render(GLuint shaderId)
   {
-    glEnableVertexAttribArray(glGetAttribLocation(shaderId, "vertices"));
-    glBindBuffer(GL_ARRAY_BUFFER, vertices_);
-    glVertexAttribPointer(glGetAttribLocation(shaderId, "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+    if (vertices_)
+      {
+	glEnableVertexAttribArray(glGetAttribLocation(shaderId, "vertices"));
+	glBindBuffer(GL_ARRAY_BUFFER, vertices_);
+	glVertexAttribPointer(glGetAttribLocation(shaderId, "vertices"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+      }
 
-    glEnableVertexAttribArray(glGetAttribLocation(shaderId, "texcoord"));
-    glBindBuffer(GL_ARRAY_BUFFER, uvs_);
-    glVertexAttribPointer(glGetAttribLocation(shaderId, "texcoord"), 2, GL_FLOAT, GL_FALSE, 0, 0);
+    if (uvs_)
+      {
+	glEnableVertexAttribArray(glGetAttribLocation(shaderId, "texcoord"));
+	glBindBuffer(GL_ARRAY_BUFFER, uvs_);
+	glVertexAttribPointer(glGetAttribLocation(shaderId, "texcoord"), 2, GL_FLOAT, GL_FALSE, 0, 0);
+      }
 
-    glEnableVertexAttribArray(glGetAttribLocation(shaderId, "normals"));
-    glBindBuffer(GL_ARRAY_BUFFER, normals_);
-    glVertexAttribPointer(glGetAttribLocation(shaderId, "normals"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+    if (normals_)
+      {
+	glEnableVertexAttribArray(glGetAttribLocation(shaderId, "normals"));
+	glBindBuffer(GL_ARRAY_BUFFER, normals_);
+	glVertexAttribPointer(glGetAttribLocation(shaderId, "normals"), 3, GL_FLOAT, GL_FALSE, 0, 0);
+      }
 
     glDrawArrays(GL_TRIANGLES, 0, verticesNumber_);
     glDisableVertexAttribArray(glGetAttribLocation(shaderId, "vertices"));

@@ -81,39 +81,46 @@ int					main()
 
   GBufferManager::getInstance().init(1344, 704);
 
-      Shader					gooseShader;
-      Shader					catShader;
-      Shader					barrelShader;
+  Shader					gooseShader;
+  Shader					catShader;
+  Shader					barrelShader;
+  Shader					lightPointShader(1);
+  LightPoint					l1;
 
-      {
-	goose.init("goose.obj");
-	cat.init("cat.obj");
-	barrel.init("barrel.obj");
+  goose.init("goose.obj");
+  cat.init("cat.obj");
+  barrel.init("barrel.obj");
+  l1.init();
+  l1.setColor(glm::vec3(1,0,1));
 
-	gooseShader.init("deferred.vert", "deferred.pix");
-	gooseShader.setTexture("myTexture",
-			       1,
-			       ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
+  gooseShader.init("deferred.vert", "deferred.pix");
+  gooseShader.setTexture("myTexture",
+			 1,
+			 ResourceManager::getInstance().get<ImageMedia>("goose.jpg")->getTexture());
 
-	catShader.init("deferred.vert", "deferred.pix");
-	catShader.setTexture("myTexture",
-			       0,
-			       ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
+  catShader.init("deferred.vert", "deferred.pix");
+  catShader.setTexture("myTexture",
+		       0,
+		       ResourceManager::getInstance().get<ImageMedia>("cat.tga")->getTexture());
 
-	barrelShader.init("deferred.vert", "deferred.pix");
-	barrelShader.setTexture("myTexture",
-			       0,
-			       ResourceManager::getInstance().get<ImageMedia>("barrel.jpg")->getTexture());
+  barrelShader.init("deferred.vert", "deferred.pix");
+  barrelShader.setTexture("myTexture",
+			  0,
+			  ResourceManager::getInstance().get<ImageMedia>("barrel.jpg")->getTexture());
 
-	goose.attachShader(gooseShader);
-	cat.attachShader(catShader);
-	barrel.attachShader(barrelShader);
+  lightPointShader.init("deferred.vert", "deferred.pix");
 
-	goose.getTransform() = glm::translate(goose.getTransform(), glm::vec3(1, 0, 0));	
-	cat.getTransform() = glm::translate(cat.getTransform(), glm::vec3(-1, 0, 0));	
-	barrel.getTransform() = glm::translate(barrel.getTransform(), glm::vec3(0, 0, 1));
-	barrel.getTransform() = glm::scale(0.4, 0.4, 0.4);
-      }
+  goose.attachShader(gooseShader);
+  cat.attachShader(catShader);
+  barrel.attachShader(barrelShader);
+  l1.attachShader(lightPointShader);
+
+  goose.getTransform() = glm::translate(goose.getTransform(), glm::vec3(1, 0, 0));	
+  cat.getTransform() = glm::translate(cat.getTransform(), glm::vec3(-1, 0, 0));	
+  barrel.getTransform() = glm::translate(barrel.getTransform(), glm::vec3(0, 0, 1));
+  barrel.getTransform() = glm::scale(0.4, 0.4, 0.4);
+  l1.getTransform() = glm::scale(1.6, 1.6, 1.6);
+
 
   try
     {
