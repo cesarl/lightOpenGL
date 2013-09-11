@@ -10,10 +10,10 @@
 #include				"ShaderManager.hpp"
 #include				"Camera.hpp"
 
-#include				"Light.hpp"
 #include				"Shader.hh"
 #include				"Mesh.hh"
 #include				"GBufferManager.hpp"
+#include				"LightPoint.hpp"
 
 #include				<exception>
 
@@ -29,11 +29,6 @@ void					update(float time, const ALLEGRO_EVENT &ev)
 
 void					draw(float time, const ALLEGRO_EVENT &ev)
 {
-  // I clear GBuffer before drawwing on int
-  GBufferManager::getInstance().bindForWriting();
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
   ShaderManager::getInstance().render();
 
   GBufferManager::getInstance().bindForReading();

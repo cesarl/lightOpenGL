@@ -5,6 +5,7 @@
 #include			<algorithm>
 #include			"Singleton.hpp"
 #include			"Shader.hh"
+#include			"LightPoint.hpp"
 #include			"Camera.hpp"
 #include			"GBufferManager.hpp"
 
@@ -15,7 +16,8 @@
 class				ShaderManager : public Singleton<ShaderManager>
 {
 private:
-  std::list<Shader*>		list_;
+  std::list<Shader*>		shaders_;
+  std::list<LightPoint*>	lightPoints_;
 public:
   friend class Singleton<ShaderManager>;
 
@@ -24,12 +26,22 @@ public:
 
   void				addShader(Shader *shader)
   {
-    list_.push_back(shader);
+    shaders_.push_back(shader);
   }
 
   void				removeShader(Shader *shader)
   {
-    list_.remove(shader);
+    shaders_.remove(shader);
+  }
+
+  void				addLightPoint(LightPoint *lightPoint)
+  {
+    lightPoints_.push_back(lightPoint);
+  }
+
+  void				removeLightPoint(LightPoint *lightPoint)
+  {
+    lightPoints_.remove(lightPoint);
   }
 
   void				render()
@@ -37,8 +49,13 @@ public:
     std::list<Shader*>::iterator it;
     UniformMatrix4f		matrix(glm::value_ptr(camera.getVp()));
 
-    it = list_.begin();
-    while (it != list_.end())
+    // I clear GBuffer before drawing on it
+    GBufferManager::getInstance().bindForWriting();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    it = shaders_.begin();
+    while (it != shaders_.end())
       {
 	GBufferManager::getInstance().bindForWriting();
 	(*it)->use();
