@@ -31,24 +31,24 @@ void					draw(float time, const ALLEGRO_EVENT &ev)
 {
   ShaderManager::getInstance().render();
 
-  GBufferManager::getInstance().bindForReading();
+  // GBufferManager::getInstance().bindForReading();
 
-  GLint HalfWidth = (GLint)(1334 / 2.0f);
-  GLint HalfHeight = (GLint)(704 / 2.0f);
-  GLint w = 1334;
-  GLint h = 704;
+  // GLint HalfWidth = (GLint)(1334 / 2.0f);
+  // GLint HalfHeight = (GLint)(704 / 2.0f);
+  // GLint w = 1334;
+  // GLint h = 704;
         
-  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_POSITION);
-  glBlitFramebuffer(0, 0, 1334, 704, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+  // GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_POSITION);
+  // glBlitFramebuffer(0, 0, 1334, 704, 0, 0, HalfWidth, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
-  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_DIFFUSE);
-  glBlitFramebuffer(0, 0, 1334, 704, 0, HalfHeight, HalfWidth, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+  // GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_DIFFUSE);
+  // glBlitFramebuffer(0, 0, 1334, 704, 0, HalfHeight, HalfWidth, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
-  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_NORMAL);
-  glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, HalfHeight, w, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+  // GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_NORMAL);
+  // glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, HalfHeight, w, h, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
-  GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_TEXCOORD);
-  glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, 0, w, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
+  // GBufferManager::getInstance().setReadBuffer(GBufferManager::GB_TEXTURE_TYPE_TEXCOORD);
+  // glBlitFramebuffer(0, 0, 1334, 704, HalfWidth, 0, w, HalfHeight, GL_COLOR_BUFFER_BIT, GL_LINEAR);
 
   (void)ev;
   (void)time;
@@ -109,6 +109,7 @@ int					main()
 			  ResourceManager::getInstance().get<ImageMedia>("barrel.jpg")->getTexture());
 
   Uniform3f		color(1,0,1);
+
   lightPointShader.init("light.vert", "light.pix");
   lightPointShader.addUniform("color", color);
 

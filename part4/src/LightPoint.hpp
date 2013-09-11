@@ -30,12 +30,18 @@ public:
     Mesh::operator=(o);
   }
 
-  // virtual void				render(GLuint shaderId)
-  // {
-  //   GBufferManager::getInstance().bindForWriting();
-  //   model_->render(shaderId);
-  //   glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  // }
+  virtual void				render(GLuint shaderId)
+  {
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE, GL_ONE);
+
+    GBufferManager::getInstance().bindForReading();
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    model_->render(shaderId);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  }
 
 
 };

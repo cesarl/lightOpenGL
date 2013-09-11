@@ -35,6 +35,11 @@ void					Mesh::render(GLuint shaderId)
 {
 
   GBufferManager::getInstance().bindForWriting();
+  // glDepthMask(GL_TRUE);
+  glEnable(GL_DEPTH_TEST);
+  glDisable(GL_BLEND);
   model_->render(shaderId);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  //glDepthMask(GL_FALSE);
+  glDisable(GL_DEPTH_TEST);
 }

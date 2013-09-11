@@ -1,10 +1,22 @@
 in vec3 _color;
-in vec3 _spacePos;
+in vec3 _vertex;
+in vec4 _screenCoord;
+
+layout(location = 0) uniform sampler2D position;
+layout(location = 1) uniform sampler2D diffuse;
+layout(location = 2) uniform sampler2D normal;
+layout(location = 3) uniform sampler2D texcoord;
+
+out vec4 render;
 
 void main()
 {
-  gl_FragData[0] = vec4(_spacePos, 1.0f); // space position
-  gl_FragData[1] = vec4(_color.rgb, 1.0f); // diffuse
-  gl_FragData[2] = vec4(_spacePos, 1.0f);
-  gl_FragData[3] = vec4(_spacePos, 0.0f); // tex coord
+  vec2 texcoord = vec2((_screenCoord.x / _screenCoord.w + 1.0) * 0.5,
+    (_screenCoord.y /_screenCoord.w + 1.0 ) * 0.5);
+  /* render = vec4(_spacePos.rgb, 1.0f); */
+  render = texture(diffuse, texcoord);
+  /* gl_FragData[0] = vec4(_spacePos, 0.0f); // space position */
+  /* gl_FragData[1] = vec4(_color.rgb, 1.0f); // diffuse */
+  /* gl_FragData[2] = vec4(_spacePos, 0.0f); */
+  /* gl_FragData[3] = vec4(_spacePos, 0.0f); // tex coord */
 }

@@ -74,6 +74,11 @@ public:
   void				bindForReading()
   {
     glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo_);
+    for (unsigned int i = 0 ; i < GB_TEXTURE_TYPE_NUMBER; i++)
+      {
+	glActiveTexture(GL_TEXTURE0 + i);
+	glBindTexture(GL_TEXTURE_2D, textures_[GB_TEXTURE_TYPE_POSITION + i]);
+      }
   }
 
   void				setReadBuffer(GB_TEXTURE_TYPE type)
